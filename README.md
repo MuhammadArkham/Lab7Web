@@ -340,6 +340,121 @@ public function index($kategori = null)
 ```
 
 ---
+## Praktikum 4: Framework Lanjutan (Modul Login)
 
-## Kesimpulan
-View Layout dan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat UI yang modular dan efisien. View Layout mengatur kerangka besar halaman, sedangkan View Cell mengatur komponen kecil yang dinamis seperti sidebar artikel terkini.
+### Tujuan
+- Memahami konsep Auth dan Filter
+- Memahami konsep dasar Login System
+- Membuat modul login menggunakan Framework CodeIgniter 4
+
+### Langkah-langkah
+
+#### 1. Membuat Tabel User
+```sql
+CREATE TABLE user (
+    id INT(11) auto_increment,
+    username VARCHAR(200) NOT NULL,
+    useremail VARCHAR(200),
+    userpassword VARCHAR(200),
+    PRIMARY KEY(id)
+);
+```
+
+#### 2. Membuat Model User
+Buat `app/Models/UserModel.php`:
+```php
+<?php
+namespace App\Models;
+use CodeIgniter\Model;
+
+class UserModel extends Model
+{
+    protected $table = 'user';
+    protected $primaryKey = 'id';
+    protected $useAutoIncrement = true;
+    protected $allowedFields = ['username', 'useremail', 'userpassword'];
+}
+```
+
+#### 3. Membuat Controller User
+Buat `app/Controllers/User.php` dengan method `login()` dan `logout()`.
+
+#### 4. Membuat View Login
+Buat `app/Views/user/login.php` berisi form Sign In dengan field email dan password.
+
+#### 5. Membuat Database Seeder
+```
+php spark make:seeder UserSeeder
+php spark db:seed UserSeeder
+```
+Data login:
+- Email: `admin@email.com`
+- Password: `admin123`
+
+#### 6. Membuat Auth Filter
+Buat `app/Filters/Auth.php`:
+```php
+<?php namespace App\Filters;
+
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Filters\FilterInterface;
+
+class Auth implements FilterInterface
+{
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/user/login');
+        }
+    }
+
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
+    {
+        // Do something here
+    }
+}
+```
+
+#### 7. Konfigurasi Filters.php
+Tambahkan alias `auth` pada `app/Config/Filters.php`:
+```php
+'auth' => Auth::class,
+```
+
+#### 8. Update Routes.php
+```php
+$routes->get('/user/login', 'User::login');
+$routes->post('/user/login', 'User::login');
+$routes->get('/user/logout', 'User::logout');
+
+$routes->group('admin', ['filter' => 'auth'], function($routes) {
+    $routes->get('artikel', 'Artikel::admin_index');
+    $routes->add('artikel/add', 'Artikel::add');
+    $routes->add('artikel/edit/(:any)', 'Artikel::edit/$1');
+    $routes->get('artikel/delete/(:any)', 'Artikel::delete/$1');
+});
+```
+
+### Hasil
+- Halaman admin hanya bisa diakses setelah login
+- Jika belum login, otomatis redirect ke halaman login
+- Logout menghapus session dan redirect ke halaman login
+
+### Screenshot
+
+#### Tampilan Form Login
+![Login Form](img/login.png)
+
+#### Tampilan Redirect ke Login (sebelum login)
+![Redirect Login](img/redirect_login.png)
+
+#### Tampilan Admin Artikel (setelah login)
+![Admin Artikel](img/admin_artikel.png)
+
+#### Tampilan Tambah Artikel
+![Tambah Artikel](img/tambah_artikel.png)
+
+#### Tampilan Edit Artikel
+![Edit Artikel](img/edit_artikel.png)
+View Layan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat UI yang modular dan efisien. View Layout mengatur kerangka besar halaman, sedangkan View Cell mengatur komponen kecil yang dinamis seperti sidebar artikel terkini.

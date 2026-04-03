@@ -92,10 +92,10 @@ Buat file `app/Views/about.php`:
 ## Hasil Praktikum
 
 ### Tampilan Halaman About
-![Halaman About](screenshots/about.png)
+![Halaman About](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20074752.png?raw=true)
 
 ### Tampilan Halaman Kontak
-![Halaman Kontak](screenshots/contact.png)
+![Halaman Kontak](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20074838.png?raw=true)
 
 ---
 
@@ -188,19 +188,19 @@ INSERT INTO artikel (judul, isi, slug) VALUES
 ## Hasil Praktikum
 
 ### Tampilan Daftar Artikel
-![Daftar Artikel](screenshots/artikel.png)
+![Daftar Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true)
 
 ### Tampilan Detail Artikel
-![Detail Artikel](screenshots/detail.png)
+![Detail Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true)
 
 ### Tampilan Admin
-![Admin](screenshots/admin.png)
+![Admin](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080019.png?raw=true)
 
 ### Tampilan Form Tambah Artikel
-![Form Tambah](screenshots/form_add.png)
+![Form Tambah](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080151.png?raw=true)
 
 ### Tampilan Form Edit Artikel
-![Form Edit](screenshots/form_edit.png)
+![Form Edit](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true)
 
 ---
 
@@ -301,10 +301,10 @@ ALTER TABLE artikel ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
 ## Hasil Praktikum
 
 ### Tampilan Halaman Artikel dengan Layout Baru
-![Artikel](screenshots/artikel_layout.png)
+![Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true)
 
 ### Tampilan Halaman About dengan Sidebar Artikel Terkini
-![About](screenshots/about_layout.png)
+![About](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080933.png?raw=true)
 
 ---
 
@@ -444,17 +444,17 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 ### Screenshot
 
 #### Tampilan Form Login
-![Login Form](img/login.png)
+![Login Form](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20091948.png?raw=true)
 
 #### Tampilan Redirect ke Login (sebelum login)
 ![Redirect Login](img/redirect_login.png)
 
 #### Tampilan Admin Artikel (setelah login)
-![Admin Artikel](img/admin_artikel.png)
+![Admin Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20092322.png?raw=true)
 
 #### Tampilan Tambah Artikel
-![Tambah Artikel](img/tambah_artikel.png)
+![Tambah Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080151.png?raw=true)
 
 #### Tampilan Edit Artikel
-![Edit Artikel](img/edit_artikel.png)
+![Edit Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true)
 View Layan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat UI yang modular dan efisien. View Layout mengatur kerangka besar halaman, sedangkan View Cell mengatur komponen kecil yang dinamis seperti sidebar artikel terkini.

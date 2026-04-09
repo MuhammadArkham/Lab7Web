@@ -215,7 +215,7 @@ Pada praktikum ini telah berhasil membuat aplikasi CRUD sederhana menggunakan Co
 ---
 
 
-
+```
 
 # Praktikum 3: View Layout dan View Cell
 

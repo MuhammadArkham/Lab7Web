@@ -457,4 +457,76 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
 #### Tampilan Edit Artikel
 ![Edit Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true)
+
+```markdown
+```
+# Praktikum 5: Pagination dan Pencarian
+
+## Tujuan
+1. Memahami konsep dasar Pagination.
+2. Memahami konsep dasar Pencarian.
+3. Membuat Paging dan Pencarian menggunakan Framework CodeIgniter 4.
+```
+
+```
+## Langkah-langkah Praktikum
+
+### 1. Membuat Pagination
+
+Modifikasi method `admin_index()` di `app/Controllers/Artikel.php`:
+```php
+public function admin_index() 
+{
+    $title = 'Daftar Artikel';
+    $q = $this->request->getVar('q') ?? '';
+    $model = new ArtikelModel();
+    $data = [
+        'title'   => $title,
+        'q'       => $q,
+        'artikel' => $model->like('judul', $q)->paginate(10),
+        'pager'   => $model->pager,
+    ];
+    return view('artikel/admin_index', $data);
+}
+```
+
+### 2. Menambahkan Link Pagination di View
+Tambahkan kode berikut di `app/Views/artikel/admin_index.php` 
+setelah tag `</table>`:
+```php
+<?= $pager->only(['q'])->links(); ?>
+```
+
+### 3. Membuat Form Pencarian
+Tambahkan form pencarian di `app/Views/artikel/admin_index.php` 
+sebelum tabel:
+```php
+<form method="get" class="form-search">
+    <input type="text" name="q" value="<?= $q; ?>" 
+        placeholder="Cari data">
+    <input type="submit" value="Cari" class="btn btn-primary">
+</form>
+```
+
+---
+
+## Hasil Praktikum
+
+### Tampilan Admin dengan Pagination dan Pencarian
+![Admin Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true)
+
+### Hasil Pencarian Data
+![Hasil Pencarian](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true)
+
+---
+
+## Kesimpulan
+Pagination berfungsi untuk membatasi tampilan data per halaman 
+sehingga halaman tidak terlalu panjang. Fitur pencarian memungkinkan 
+admin untuk memfilter data artikel berdasarkan kata kunci tertentu. 
+Kedua fitur ini bekerja bersama sehingga hasil pencarian juga 
+mendukung pagination.
+```
+
+---
 View Layan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat UI yang modular dan efisien. View Layout mengatur kerangka besar halaman, sedangkan View Cell mengatur komponen kecil yang dinamis seperti sidebar artikel terkini.

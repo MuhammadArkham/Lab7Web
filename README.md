@@ -2,7 +2,7 @@
 
 Repositori ini berisi hasil pengerjaan **Praktikum Pemrograman Web** yang mencakup pengembangan sistem backend menggunakan **CodeIgniter 4** dan frontend menggunakan **VueJS 3 (Single Page Application)**. Seluruh modul dan tugas praktikum telah dikerjakan secara komprehensif.
 
-## 🚀 Fitur yang Telah Diselesaikan
+## Fitur yang Telah Diselesaikan
 
 ### Backend (CodeIgniter 4)
 - **Modul 1-2 (Dasar CI4 & CRUD):** Routing dasar, Controller logic, dan operasi CRUD (Create, Read, Update, Delete) pada tabel `artikel` berjalan dengan baik.

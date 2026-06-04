@@ -534,29 +534,99 @@ View Layan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat 
 
 ---
 
-## Lanjutan Praktikum Pemrograman Web (Modul 7 - 12)
 
-### Praktikum Lanjutan Backend & Frontend
+---
 
-Berikut adalah rangkuman penyelesaian fitur lanjutan dari Modul 7 hingga 12 yang diintegrasikan ke dalam repositori ini:
+# Laporan Praktikum Pemrograman Web (Modul 6 - 12)
 
-1. **Modul 7 (Relasi & Upload File):** 
-   - Implementasi fungsionalitas unggah gambar artikel (tersimpan di public/gambar).
-   - Pembuatan skema relasi Join Table antara tabel rtikel dan tabel kategori.
+Bagian ini melengkapi dokumentasi sebelumnya (Modul 1-5) dengan hasil pengerjaan Modul 6 hingga 12 secara terperinci.
 
-2. **Modul 8 & 9 (AJAX & Pagination Lanjutan):**
-   - Halaman Admin diubah menjadi antarmuka responsif menggunakan **jQuery AJAX**.
-   - Pencarian data secara *real-time* dengan filter kategori.
-   - Penambahan Indikator Loading (Memuat data...).
-   - Fitur *Sorting* data tabel tanpa reload (Tugas Tambahan diselesaikan).
+## Praktikum 6: Pencarian dan Fitur Lanjutan
 
-3. **Modul 10 (RESTful API dengan CI4):**
-   - Pembuatan endpoint API backend (/post atau /ajaxcontroller) menggunakan ResourceController.
-   - Konfigurasi respon JSON dan otorisasi CORS agar dapat dikonsumsi oleh aplikasi klien pihak ketiga.
+### Tujuan
+1. Memahami konsep filter data (pencarian) dan pagination lebih dalam.
+2. Memodifikasi Layout agar lebih dinamis.
+3. Mengaplikasikan **View Cell** tambahan untuk Kategori.
 
-4. **Modul 11 & 12 (VueJS 3 SPA Frontend):**
-   - Implementasi Frontend modern menggunakan VueJS dan Vue Router (Single Page Application).
-   - Modifikasi desain *layout* agar seragam (seperti Layout Sederhana) menggunakan Bootstrap dan CSS Kustom.
-   - Pengambilan dan manipulasi data artikel (CRUD) ke backend CI4 menggunakan **Axios**.
+### Langkah-langkah
+1. **Modifikasi Daftar Kategori pada Sidebar**
+   Membuat file View Cell `app/Cells/KategoriList.php` untuk merender nama-nama kategori secara dinamis dari database tanpa hardcode. Menyesuaikan pemanggilan di `layout/main.php` menggunakan `view_cell()`.
+2. **Menampilkan Kategori di Detail Artikel**
+   Memodifikasi fungsi `view($slug)` pada controller `Artikel` agar melakukan `JOIN` tabel kategori dan menampilkan atribut `nama_kategori` secara eksplisit pada file `detail.php`.
 
-Keseluruhan fitur Modul 1 hingga 12 kini telah terintegrasi dengan sempurna.
+### Hasil Praktikum
+- Detail artikel berhasil merender informasi kategori (Bukan hanya ID, tapi string nama).
+- Widget Header di-sidebar berhasil diganti dengan modul daftar kategori yang reaktif.
+
+---
+
+## Praktikum 7: Relasi Tabel & Upload File
+
+### Tujuan
+1. Memahami pembuatan skema relasi Foreign Key (Tabel Artikel ke Kategori).
+2. Memahami cara mengolah objek *File* pada server menggunakan PHP.
+
+### Langkah-langkah
+1. Menambahkan form input bertipe `file` (`enctype="multipart/form-data"`) pada `form_add.php` dan `form_edit.php`.
+2. Modifikasi model `ArtikelModel` agar membaca direktori `public/gambar/`. File gambar diunggah secara aman dan namanya disimpan sebagai _string_ ke kolom `gambar` di database.
+3. Melakukan *JOIN* relasi dengan tabel `kategori` untuk memastikan artikel terstruktur dengan kategori yang benar.
+
+### Screenshot 
+> *Silakan masukkan screenshot form upload gambar dan tabel admin di sini*
+![Upload Form](#)
+
+---
+
+## Praktikum 8 & 9: Menguasai AJAX & Real-time Pagination
+
+### Tujuan
+1. Memahami prinsip asinkronus (Asynchronous Javascript and XML).
+2. Memindahkan perenderan tabel halaman *Admin* agar tidak terjadi _page-reload_ / _refresh_.
+
+### Langkah-langkah
+1. Pembuatan fungsi `fetchData` dengan **jQuery AJAX** di file `admin_index.php`.
+2. Modifikasi Controller `admin_index` pada `Artikel.php` agar memeriksa fungsi `$this->request->isAJAX()`. Jika bernilai `true`, maka Controller mengembalikan format JSON berisi kumpulan array artikel dan struktur `pager`.
+3. Memperbaiki komponen UI dengan standar *Bootstrap 4* mengikuti desain aslinya (`<div class="row">`, `form-inline`, `pagination`).
+
+**Tugas Praktikum Diselesaikan:**
+- ⏳ **Indikator Loading:** Menambahkan indikator visual (teks berkedip/opacity tabel dikurangi) saat request data berlangsung.
+- 🔽 **Sorting Header Tabel:** Menambahkan fungsi pengurutan berdasarkan `id` atau `judul` secara asinkron dengan *click handler* pada Javascript.
+
+### Screenshot
+> *Silakan masukkan screenshot tabel admin dengan indikator sorting & AJAX di sini*
+![AJAX Table](#)
+
+---
+
+## Praktikum 10: Pembuatan REST API Backend
+
+### Tujuan
+1. Memisahkan logika backend dari tampilan _View_ CodeIgniter.
+2. Membangun fondasi untuk menghubungkan klien frontend terpisah (seperti VueJS).
+
+### Langkah-langkah
+1. Membuat controller `Post.php` (extend `ResourceController`) pada direktori `app/Controllers`.
+2. Implementasi method `index`, `create`, `update`, dan `delete` yang merespon secara eksklusif menggunakan output **JSON**.
+3. Menyisipkan fungsi filter **CORS** (`app/Config/Filters.php`) untuk mencegah pemblokiran dari domain _localhost_ yang berbeda.
+
+---
+
+## Praktikum 11 & 12: SPA (Single Page Application) VueJS 3
+
+### Tujuan
+1. Membuat aplikasi Front-end modern terpisah.
+2. Memanfaatkan **Vue Router** dan **Axios**.
+
+### Langkah-langkah
+1. Proyek Node dinitialisasi di subfolder/repo terpisah. Modul _Vue Router_ dikonfigurasi melalui `app.js` menggunakan Webpack.
+2. Pembuatan komponen `Home.js` (Halaman Utama dengan artikel terkini), `About.js` (Profil), dan `ArtikelList.js` (Halaman Dashboard/CRUD).
+3. Melakukan _styling improvisasi_ dengan meniru desain `style.css` bawaan CI4 pada komponen Vue, agar antarmuka frontend terlihat harmonis dan rapi.
+4. CRUD melalui *Axios* berhasil diimplementasikan dengan sempurna tanpa me-refresh browser.
+
+### Screenshot
+> *Silakan masukkan screenshot Frontend VueJS SPA Anda saat memuat, menambah, dan menghapus artikel di sini*
+![VueJS Frontend](#)
+
+---
+*Laporan komprehensif dikerjakan sepenuhnya berdasarkan arahan Dosen Pengampu & Modul.*
+

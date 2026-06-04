@@ -211,11 +211,9 @@ Pada praktikum ini telah berhasil membuat aplikasi CRUD sederhana menggunakan Co
 - Menambah artikel baru
 - Mengubah artikel
 - Menghapus artikel
-```
 ---
 
 
-```
 
 # Praktikum 3: View Layout dan View Cell
 
@@ -458,17 +456,13 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 #### Tampilan Edit Artikel
 ![Edit Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true)
 
-```markdown
-```
 # Praktikum 5: Pagination dan Pencarian
 
 ## Tujuan
 1. Memahami konsep dasar Pagination.
 2. Memahami konsep dasar Pencarian.
 3. Membuat Paging dan Pencarian menggunakan Framework CodeIgniter 4.
-```
 
-```
 ## Langkah-langkah Praktikum
 
 ### 1. Membuat Pagination
@@ -526,7 +520,6 @@ sehingga halaman tidak terlalu panjang. Fitur pencarian memungkinkan
 admin untuk memfilter data artikel berdasarkan kata kunci tertentu. 
 Kedua fitur ini bekerja bersama sehingga hasil pencarian juga 
 mendukung pagination.
-```
 
 ---
 View Layan View Cell adalah dua fitur CI4 yang bekerja beriringan untuk membuat UI yang modular dan efisien. View Layout mengatur kerangka besar halaman, sedangkan View Cell mengatur komponen kecil yang dinamis seperti sidebar artikel terkini.

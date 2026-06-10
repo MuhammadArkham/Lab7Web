@@ -623,3 +623,52 @@ Bagian ini melengkapi dokumentasi sebelumnya (Modul 1-5) dengan hasil pengerjaan
 ---
 *Laporan komprehensif dikerjakan sepenuhnya berdasarkan arahan Dosen Pengampu & Modul.*
 
+
+---
+
+## Praktikum 13 & 14: SPA Security, API Token Authentication & Interceptors
+
+### Tujuan
+1. Mengamankan Single Page Application (SPA) VueJS menggunakan **Navigation Guards**.
+2. Mengamankan REST API CodeIgniter 4 menggunakan **Token-Based Authentication** dan **Filters**.
+3. Menangani otorisasi di klien secara otomatis menggunakan **Axios Interceptors**.
+
+### Langkah-langkah Implementasi
+1. **Pembuatan Endpoint Login (Backend CI4):**
+   Membuat `Api/Auth.php` yang menerima request POST kredensial. Jika cocok dengan tabel database, sistem merespon dengan JSON berisi *Token Rahasia* (Base64 Encode).
+   
+2. **Pembuatan Filter API (Backend CI4):**
+   Membuat `Filters/ApiAuthFilter.php` yang bertugas mencegat (intercept) setiap HTTP Request. Filter ini mengekstrak string `Authorization: Bearer <token>` dari header. Jika token valid, eksekusi dilanjutkan; jika tidak, API menolak dengan status HTTP 401 Unauthorized. Filter ini diterapkan pada rute `/post` untuk method POST, PUT, dan DELETE.
+
+3. **Komponen Login (Frontend VueJS):**
+   Membuat UI `Login.js` untuk mengambil input kredensial admin dan mengirimkan *Axios HTTP Post* ke backend. Jika sukses, status `isLoggedIn` dan `userToken` akan disimpan ke dalam `localStorage` browser.
+
+4. **Navigation Guards (Vue Router):**
+   Fungsi `router.beforeEach` memverifikasi setiap perpindahan URL internal. Jika rute memiliki konfigurasi `meta: { requiresAuth: true }` (misalnya pada halaman `/artikel` dan `/about`), sistem memeriksa `localStorage`. Jika sesi belum ada, klien otomatis dibelokkan secara paksa ke halaman `/login`.
+
+5. **Axios Interceptors (Frontend VueJS):**
+   Fungsi pencegat Axios `axios.interceptors.request.use` memastikan bahwa setiap kali frontend menarik/merubah data dari backend, *userToken* akan otomatis disuntikkan ke dalam HTTP Header secara sembunyi-sembunyi.
+   Sementara itu, `axios.interceptors.response.use` memantau semua balasan backend. Jika server membalas dengan status *401 Unauthorized*, artinya sesi kedaluwarsa dan pengguna akan langsung di-logout paksa.
+
+### Skenario Pengujian yang Telah Dilakukan
+- **Skenario A (Terkunci):** Menghapus _Local Storage_ dan menekan menu **Kelola Artikel**. Aplikasi memunculkan peringatan alert penolakan dan melempar halaman ke Form Login.
+- **Skenario B (Terkunci API Tanpa Token):** Mencoba melakukan request _POST/PUT_ melalui API Tools (seperti Postman) tanpa _Bearer Token_. Server menolak akses dengan respons 401.
+- **Skenario C (Login Sukses):** Memasukkan akun valid, sistem mengembalikan status 200, dan menu *Logout* muncul secara dinamis di Navbar.
+- **Skenario D (Aksi dengan Interceptor):** Menambahkan/Menghapus artikel di dashboard Vue; proses sukses karena Axios telah menyuntikkan token dari _Local Storage_ ke _Header_ secara transparan di balik layar.
+
+### Screenshot Hasil Praktikum
+> **Tampilan Form Login**
+> ![Form Login](#)
+
+> **Tampilan Penolakan Rute (Belum Login / Guarded)**
+> ![Penolakan Rute](#)
+
+> **Tampilan Header Network dengan Bearer Token (Axios Interceptors)**
+> ![Token Tersuntik](#)
+
+> **Tampilan Penolakan 401 Unauthorized via Postman**
+> ![Error 401](#)
+
+---
+*Laporan ini merupakan penyelesaian akhir penugasan modul keamanan SPA dan REST API (Modul 13-14).*
+

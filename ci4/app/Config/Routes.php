@@ -29,5 +29,11 @@ $routes->post('/ajax/add', 'AjaxController::add');
 $routes->post('/ajax/update/(:num)', 'AjaxController::update/$1');
 $routes->post('/ajax/delete/(:num)', 'AjaxController::delete/$1');
 
-// Modul 10: REST API Routes
-$routes->resource('post');
+// Modul 10 & 14: REST API Routes & API Security
+$routes->post('api/login', 'Api\Auth::login');
+
+$routes->get('post', 'Post::index');
+$routes->get('post/(:segment)', 'Post::show/$1');
+$routes->post('post', 'Post::create', ['filter' => 'apiauth']);
+$routes->put('post/(:segment)', 'Post::update/$1', ['filter' => 'apiauth']);
+$routes->delete('post/(:segment)', 'Post::delete/$1', ['filter' => 'apiauth']);

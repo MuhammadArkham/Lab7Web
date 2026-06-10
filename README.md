@@ -605,3 +605,8 @@ Bagian ini melengkapi dokumentasi sebelumnya (Modul 1-5) dengan hasil pengerjaan
 **Modul 9 (Lab7Web): Pagination & AJAX**
 > *Pertanyaan:* Tambahkan indikator loading saat data sedang diambil dari server dan Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul, dll.) dengan AJAX.
 **Jawaban:** Pada tampilan artikel, *Library Pagination* CI4 telah digunakan dengan penambahan kode Javascript/AJAX (`$.ajax`) untuk memicu *Sorting* tanpa perlu me-*refresh* halaman, yang disertai dengan pemanggilan animasi SVG *Loading Spinner* di layar (*Loading Indicator*).
+
+
+### Screenshot Hasil Kerja
+> **Ambil gambar screenshot jalannya program di web browser dan taruh di sini**
+> ![Screenshot](#)

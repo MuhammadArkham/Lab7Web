@@ -19,14 +19,14 @@ Pada modul ini, kita melakukan instalasi CI4 dan membuat _Routes_ dan _Controlle
 5. **View Layout**: Memisahkan struktur dasar HTML menjadi `header.php` dan `footer.php` agar dapat dipanggil menggunakan `<?= $this->include('template/header'); ?>`.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > Lengkapi kode program untuk menu lainnya yang ada pada Controller Page, sehingga semua link pada navigasi header dapat menampilkan tampilan dengan layout yang sama.
 > 
 > **Jawaban & Implementasi:**  
 > Telah diselesaikan. Method `contact()`, `faqs()`, dan `artikel()` ditambahkan ke `Page.php`. Setiap method mereturn view yang membungkus (include) layout dinamis `header.php` dan `footer.php` secara seragam.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -49,14 +49,14 @@ Fokus utama adalah manajemen basis data (Database) dari antarmuka Web.
 7. **Fungsi Delete (Hapus Data)**: Memicu pemusnahan _record_ menggunakan `$model->delete($id)`.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > Selesaikan programnya (CRUD) sesuai Langkah-langkah yang ada.
 > 
 > **Jawaban & Implementasi:**  
 > Fungsi Create, Read, Update, dan Delete untuk tabel `artikel` sudah berjalan penuh dan terintegrasi dengan baik ke database.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -74,14 +74,14 @@ Fokus utama adalah manajemen basis data (Database) dari antarmuka Web.
 3. **Konfigurasi View Cell**: Menggunakan pemanggilan cell untuk hal seperti _Recent Posts_ atau elemen lain yang memerlukan _logic_ khusus dari server.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > Implementasikan sistem Layouting pada project Anda.
 > 
 > **Jawaban & Implementasi:**  
 > Seluruh *view* pada CRUD Artikel kini tidak lagi memuat struktur dasar HTML karena telah dirender menggunakan sistem pewarisan `extend` ke file *main layout*.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -100,14 +100,14 @@ Sistem CRUD Admin hanya boleh diakses oleh Administrator yang memiliki identitas
 4. **Membangun Route Filter**: Mengamankan *endpoint* admin dengan _Middleware/Filters_. Dibuat file `app/Filters/Auth.php` yang me-redirect pengguna ke `/login` bila Session belum terset.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > Selesaikan program Login sesuai langkah-langkah.
 > 
 > **Jawaban & Implementasi:**  
 > Panel Admin berhasil diamankan dengan Filter. Jika _User_ mencoba mengakses kelola artikel sebelum melakukan Sign-In, sistem akan menolaknya dan me-lempar (*redirect*) ke form Login.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -127,14 +127,14 @@ Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web men
 3. **Tautan Paging View**: Merender struktur UI halaman berikutnya di view admin menggunakan `<?= $pager->only(['q'])->links(); ?>`.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > Selesaikan programnya sesuai Langkah-langkah yang ada. Anda boleh melakukan improvisasi.
 > 
 > **Jawaban & Implementasi:**  
 > Pagination CI4 dan filter pencarian terintegrasi penuh. Ketika pengguna mengetikkan kata pencarian, data hasil pencarian juga secara dinamis dipecah menjadi beberapa halaman berkat penggunaan fungsi `only(['q'])`.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -152,7 +152,7 @@ Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web men
 3. **Injeksi Data**: Menyuntikkan _string_ `nama_kategori` ini agar dapat dibaca di halaman Front-End `detail.php`.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > 1. Selesaikan semua langkah praktikum di atas.
 > 2. Modifikasi tampilan detail artikel (artikel/detail.php) untuk menampilkan nama kategori artikel.
@@ -162,7 +162,7 @@ Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web men
 > **Jawaban & Implementasi:**  
 > Data `nama_kategori` sukses diambil melalui relasi `JOIN` dari dalam model dan disuntikkan ke tampilan detail. `View Cell` di sidebar juga telah berhasil memanggil fungsionalitas kategori secara dinamis.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 
@@ -181,7 +181,7 @@ Meningkatkan *User Experience* secara dramatis dengan membuat Web beroperasi sep
 3. **Fungsi Sorting & Loading**: Memasukkan logika _click handler_ untuk menata kolom `Judul` (ASC/DESC), dan menyalakan _Spinner/Loading_ saat jQuery melakukan pengambilan data jarak jauh.
 
 
-### 💡 Pertanyaan dan Tugas
+### Pertanyaan dan Tugas
 > **Pertanyaan:**  
 > 1. Selesaikan semua langkah praktikum di atas.
 > 2. Modifikasi tampilan data artikel dan pagination sesuai kebutuhan desain.
@@ -191,7 +191,7 @@ Meningkatkan *User Experience* secara dramatis dengan membuat Web beroperasi sep
 > **Jawaban & Implementasi:**  
 > Seluruh tugas berjalan dengan lancar. Animasi _Loading Spinner_ terlihat transparan sesaat `$.ajax` berproses. Fitur pengurutan (*Sorting*) berfungsi mengubah susunan UI secara asinkron tanpa *hard-reload* pada *browser*.
 
-### 📸 Screenshot Hasil Kerja
+### Screenshot Hasil Kerja
 > **Silakan ganti tag `#` di bawah ini dengan URL gambar Anda**
 > ![Hasil Praktikum](#)
 

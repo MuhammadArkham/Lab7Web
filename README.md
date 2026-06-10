@@ -591,102 +591,17 @@ Bagian ini melengkapi dokumentasi sebelumnya (Modul 1-5) dengan hasil pengerjaan
 
 ---
 
-## Praktikum 10: Pembuatan REST API Backend
-
-### Tujuan
-1. Memisahkan logika backend dari tampilan _View_ CodeIgniter.
-2. Membangun fondasi untuk menghubungkan klien frontend terpisah (seperti VueJS).
-
-### Langkah-langkah
-1. Membuat controller `Post.php` (extend `ResourceController`) pada direktori `app/Controllers`.
-2. Implementasi method `index`, `create`, `update`, dan `delete` yang merespon secara eksklusif menggunakan output **JSON**.
-3. Menyisipkan fungsi filter **CORS** (`app/Config/Filters.php`) untuk mencegah pemblokiran dari domain _localhost_ yang berbeda.
-
 ---
+## Jawaban Pertanyaan dan Tugas (Modul 1-6 & 9)
 
-## Praktikum 11 & 12: SPA (Single Page Application) VueJS 3
+**Modul 1 (Lab7Web): Controller Page**
+> *Pertanyaan:* Lengkapi kode program untuk menu lainnya yang ada pada Controller Page, sehingga semua link pada navigasi header dapat menampilkan tampilan dengan layout yang sama.
+**Jawaban:** Telah diselesaikan. Controller `Page.php` telah dimodifikasi dengan penambahan *method* `about()`, `contact()`, `artikel()`, dll., dan masing-masing *method* me-*return* *view* yang membungkus (include) layout `header.php` dan `footer.php` secara dinamis.
 
-### Tujuan
-1. Membuat aplikasi Front-end modern terpisah.
-2. Memanfaatkan **Vue Router** dan **Axios**.
+**Modul 6 (Lab7Web): Kategori Artikel**
+> *Pertanyaan:* Modifikasi tampilan detail artikel (artikel/detail.php) untuk menampilkan nama kategori artikel.
+**Jawaban:** Modifikasi tampilan telah diimplementasikan pada `artikel/detail.php` di dalam struktur MVC CI4, mengambil data relasi kategori dari model, dan menyuntikkannya ke tampilan detail.
 
-### Langkah-langkah
-1. Proyek Node dinitialisasi di subfolder/repo terpisah. Modul _Vue Router_ dikonfigurasi melalui `app.js` menggunakan Webpack.
-2. Pembuatan komponen `Home.js` (Halaman Utama dengan artikel terkini), `About.js` (Profil), dan `ArtikelList.js` (Halaman Dashboard/CRUD).
-3. Melakukan _styling improvisasi_ dengan meniru desain `style.css` bawaan CI4 pada komponen Vue, agar antarmuka frontend terlihat harmonis dan rapi.
-4. CRUD melalui *Axios* berhasil diimplementasikan dengan sempurna tanpa me-refresh browser.
-
-### Screenshot
-> *Silakan masukkan screenshot Frontend VueJS SPA Anda saat memuat, menambah, dan menghapus artikel di sini*
-![VueJS Frontend](#)
-
----
-*Laporan komprehensif dikerjakan sepenuhnya berdasarkan arahan Dosen Pengampu & Modul.*
-
-
----
-
-## Praktikum 13 & 14: SPA Security, API Token Authentication & Interceptors
-
-### Tujuan
-1. Mengamankan Single Page Application (SPA) VueJS menggunakan **Navigation Guards**.
-2. Mengamankan REST API CodeIgniter 4 menggunakan **Token-Based Authentication** dan **Filters**.
-3. Menangani otorisasi di klien secara otomatis menggunakan **Axios Interceptors**.
-
-### Langkah-langkah Implementasi
-1. **Pembuatan Endpoint Login (Backend CI4):**
-   Membuat `Api/Auth.php` yang menerima request POST kredensial. Jika cocok dengan tabel database, sistem merespon dengan JSON berisi *Token Rahasia* (Base64 Encode).
-   
-2. **Pembuatan Filter API (Backend CI4):**
-   Membuat `Filters/ApiAuthFilter.php` yang bertugas mencegat (intercept) setiap HTTP Request. Filter ini mengekstrak string `Authorization: Bearer <token>` dari header. Jika token valid, eksekusi dilanjutkan; jika tidak, API menolak dengan status HTTP 401 Unauthorized. Filter ini diterapkan pada rute `/post` untuk method POST, PUT, dan DELETE.
-
-3. **Komponen Login (Frontend VueJS):**
-   Membuat UI `Login.js` untuk mengambil input kredensial admin dan mengirimkan *Axios HTTP Post* ke backend. Jika sukses, status `isLoggedIn` dan `userToken` akan disimpan ke dalam `localStorage` browser.
-
-4. **Navigation Guards (Vue Router):**
-   Fungsi `router.beforeEach` memverifikasi setiap perpindahan URL internal. Jika rute memiliki konfigurasi `meta: { requiresAuth: true }` (misalnya pada halaman `/artikel` dan `/about`), sistem memeriksa `localStorage`. Jika sesi belum ada, klien otomatis dibelokkan secara paksa ke halaman `/login`.
-
-5. **Axios Interceptors (Frontend VueJS):**
-   Fungsi pencegat Axios `axios.interceptors.request.use` memastikan bahwa setiap kali frontend menarik/merubah data dari backend, *userToken* akan otomatis disuntikkan ke dalam HTTP Header secara sembunyi-sembunyi.
-   Sementara itu, `axios.interceptors.response.use` memantau semua balasan backend. Jika server membalas dengan status *401 Unauthorized*, artinya sesi kedaluwarsa dan pengguna akan langsung di-logout paksa.
-
-### Skenario Pengujian yang Telah Dilakukan
-- **Skenario A (Terkunci):** Menghapus _Local Storage_ dan menekan menu **Kelola Artikel**. Aplikasi memunculkan peringatan alert penolakan dan melempar halaman ke Form Login.
-- **Skenario B (Terkunci API Tanpa Token):** Mencoba melakukan request _POST/PUT_ melalui API Tools (seperti Postman) tanpa _Bearer Token_. Server menolak akses dengan respons 401.
-- **Skenario C (Login Sukses):** Memasukkan akun valid, sistem mengembalikan status 200, dan menu *Logout* muncul secara dinamis di Navbar.
-- **Skenario D (Aksi dengan Interceptor):** Menambahkan/Menghapus artikel di dashboard Vue; proses sukses karena Axios telah menyuntikkan token dari _Local Storage_ ke _Header_ secara transparan di balik layar.
-
-### Screenshot Hasil Praktikum
-> **Tampilan Form Login**
-> ![Form Login](#)
-
-> **Tampilan Penolakan Rute (Belum Login / Guarded)**
-> ![Penolakan Rute](#)
-
-> **Tampilan Header Network dengan Bearer Token (Axios Interceptors)**
-> ![Token Tersuntik](#)
-
-> **Tampilan Penolakan 401 Unauthorized via Postman**
-> ![Error 401](#)
-
----
-*Laporan ini merupakan penyelesaian akhir penugasan modul keamanan SPA dan REST API (Modul 13-14).*
-
-
-
-### Jawaban Pertanyaan dan Tugas - Modul 13
-
-**Analisis Alur Kerja `router.beforeEach` dan Axios HTTP Post:**
-- **`router.beforeEach`**: Berfungsi sebagai pos satpam di sisi antarmuka (Client-Side). Sebelum halaman (seperti `/artikel` atau `/about`) dimuat secara penuh oleh browser, fungsi ini mencegat navigasi tersebut untuk memeriksa apakah terdapat jejak sesi login (kunci `isLoggedIn`) di dalam _Local Storage_. Jika kunci ini tidak ada, pengguna otomatis ditolak dan diarahkan paksa ke halaman `/login`.
-- **Axios HTTP Post**: Berfungsi sebagai kurir pengantar pesan. Saat di halaman login, fungsi ini akan mengemas data _username_ dan _password_, lalu mengirimkannya ke backend CI4. Axios kemudian akan menunggu respons dari server; jika berhasil (status 200), Axios akan mengambil _Token Rahasia_ yang dikembalikan server untuk disimpan ke dalam memori browser.
-
----
-
-### Jawaban Pertanyaan dan Tugas - Modul 14
-
-**Kesimpulan Perbedaan Navigation Guards (Vue) vs Filters (CI4):**
-Perbedaan mendasarnya terletak pada letak pertahanannya:
-- **Vue Router Navigation Guards (Sisi Klien):** Pengamanan ini hanya berfokus pada **UI/Tampilan (Visual)**. Ini mencegah orang asing melihat halaman Dasbor Admin di browser. Namun, ini tidak bisa mencegah seorang _Hacker_ yang mahir dari mengakses atau memanipulasi _database_ secara langsung menggunakan aplikasi pengujian API seperti _Postman_ atau _cURL_ (tanpa melewati browser).
-- **CodeIgniter Filters (Sisi Server):** Ini adalah **Benteng Pertahanan Utama (Data)**. Sekalipun seseorang berhasil memanipulasi _browser_ untuk bisa membuka halaman Vue, ketika ia mencoba memanipulasi data melalui API Endpoint, permintaan tersebut akan langsung menembus ke server CI4. Di titik inilah `ApiAuthFilter` akan membanting pintu dan memblokir request tersebut dengan pesan *Error 401 Unauthorized* jika tidak disertai dengan _Token_ otentikasi yang sah.
-
-Kombinasi antara _Navigation Guards_ (menyembunyikan tampilan) dan _CI4 Filters_ (melindungi data) menghasilkan sistem aplikasi SPA yang kokoh secara menyeluruh (_End-to-End Security_).
+**Modul 9 (Lab7Web): Pagination & AJAX**
+> *Pertanyaan:* Tambahkan indikator loading saat data sedang diambil dari server dan Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul, dll.) dengan AJAX.
+**Jawaban:** Pada tampilan artikel, *Library Pagination* CI4 telah digunakan dengan penambahan kode Javascript/AJAX (`$.ajax`) untuk memicu *Sorting* tanpa perlu me-*refresh* halaman, yang disertai dengan pemanggilan animasi SVG *Loading Spinner* di layar (*Loading Indicator*).

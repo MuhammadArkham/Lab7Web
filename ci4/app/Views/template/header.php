@@ -11,10 +11,11 @@
         <h1>Layout Sederhana</h1>
     </header>
     <nav>
-        <a href="<?= base_url('/');?>" class="active">Home</a>
-        <a href="<?= base_url('/artikel'); ?>">Artikel</a>
-        <a href="<?= base_url('/about'); ?>">About</a>
-        <a href="<?= base_url('/contact'); ?>">Kontak</a>
+        <?php $uri = service('uri')->getSegment(1); ?>
+        <a href="<?= base_url('/');?>" class="<?= ($uri == '') ? 'active' : '' ?>">Home</a>
+        <a href="<?= base_url('/artikel'); ?>" class="<?= ($uri == 'artikel') ? 'active' : '' ?>">Artikel</a>
+        <a href="<?= base_url('/about'); ?>" class="<?= ($uri == 'about') ? 'active' : '' ?>">About</a>
+        <a href="<?= base_url('/contact'); ?>" class="<?= ($uri == 'contact') ? 'active' : '' ?>">Kontak</a>
     </nav>
     <section id="wrapper">
         <section id="main">

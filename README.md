@@ -674,16 +674,19 @@ Bagian ini melengkapi dokumentasi sebelumnya (Modul 1-5) dengan hasil pengerjaan
 
 
 
-### Jawaban Pertanyaan Analisis
+### Jawaban Pertanyaan dan Tugas - Modul 13
 
-**1. Analisis Alur Kerja outer.beforeEach dan Axios HTTP Post (Modul 13)**
-- **outer.beforeEach**: Berfungsi sebagai pos satpam di sisi antarmuka (Client-Side). Sebelum halaman (seperti /artikel atau /about) dimuat secara penuh oleh browser, fungsi ini mencegat navigasi tersebut untuk memeriksa apakah terdapat jejak sesi login (kunci isLoggedIn) di dalam _Local Storage_. Jika kunci ini tidak ada, pengguna otomatis ditolak dan diarahkan paksa ke halaman /login.
+**Analisis Alur Kerja `router.beforeEach` dan Axios HTTP Post:**
+- **`router.beforeEach`**: Berfungsi sebagai pos satpam di sisi antarmuka (Client-Side). Sebelum halaman (seperti `/artikel` atau `/about`) dimuat secara penuh oleh browser, fungsi ini mencegat navigasi tersebut untuk memeriksa apakah terdapat jejak sesi login (kunci `isLoggedIn`) di dalam _Local Storage_. Jika kunci ini tidak ada, pengguna otomatis ditolak dan diarahkan paksa ke halaman `/login`.
 - **Axios HTTP Post**: Berfungsi sebagai kurir pengantar pesan. Saat di halaman login, fungsi ini akan mengemas data _username_ dan _password_, lalu mengirimkannya ke backend CI4. Axios kemudian akan menunggu respons dari server; jika berhasil (status 200), Axios akan mengambil _Token Rahasia_ yang dikembalikan server untuk disimpan ke dalam memori browser.
 
-**2. Kesimpulan Perbedaan Navigation Guards (Vue) vs Filters (CI4) (Modul 14)**
+---
+
+### Jawaban Pertanyaan dan Tugas - Modul 14
+
+**Kesimpulan Perbedaan Navigation Guards (Vue) vs Filters (CI4):**
 Perbedaan mendasarnya terletak pada letak pertahanannya:
-- **Vue Router Navigation Guards (Klien):** Pengamanan ini hanya berfokus pada **UI/Tampilan (Visual)**. Ini mencegah orang asing melihat halaman Dasbor Admin di browser. Namun, ini tidak bisa mencegah seorang _Hacker_ yang pintar dari mengakses atau memanipulasi _database_ secara langsung menggunakan aplikasi pihak ketiga seperti _Postman_ atau _cURL_ tanpa melewati browser.
-- **CodeIgniter Filters (Server):** Ini adalah **Benteng Pertahanan Utama (Data)**. Sekalipun seseorang berhasil memanipulasi _browser_ untuk bisa membuka halaman Vue, ketika ia mencoba menghapus atau menambah data, permintaan tersebut akan menembus ke server CI4. Di titik inilah _ApiAuthFilter_ akan memblokir request tersebut jika tidak disertai dengan _Token_ otentikasi yang sah (Error 401).
+- **Vue Router Navigation Guards (Sisi Klien):** Pengamanan ini hanya berfokus pada **UI/Tampilan (Visual)**. Ini mencegah orang asing melihat halaman Dasbor Admin di browser. Namun, ini tidak bisa mencegah seorang _Hacker_ yang mahir dari mengakses atau memanipulasi _database_ secara langsung menggunakan aplikasi pengujian API seperti _Postman_ atau _cURL_ (tanpa melewati browser).
+- **CodeIgniter Filters (Sisi Server):** Ini adalah **Benteng Pertahanan Utama (Data)**. Sekalipun seseorang berhasil memanipulasi _browser_ untuk bisa membuka halaman Vue, ketika ia mencoba memanipulasi data melalui API Endpoint, permintaan tersebut akan langsung menembus ke server CI4. Di titik inilah `ApiAuthFilter` akan membanting pintu dan memblokir request tersebut dengan pesan *Error 401 Unauthorized* jika tidak disertai dengan _Token_ otentikasi yang sah.
 
 Kombinasi antara _Navigation Guards_ (menyembunyikan tampilan) dan _CI4 Filters_ (melindungi data) menghasilkan sistem aplikasi SPA yang kokoh secara menyeluruh (_End-to-End Security_).
-

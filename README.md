@@ -28,7 +28,8 @@
 5. [Praktikum 5: Pagination dan Pencarian](#praktikum-5-pagination-dan-pencarian)
 6. [Praktikum 6: Pencarian Lanjutan dan Relasi Tabel](#praktikum-6-pencarian-lanjutan-dan-relasi-tabel)
 7. [Praktikum 9: AJAX dan Real-time Pagination](#praktikum-9-ajax-dan-real-time-pagination)
-8. [Struktur Folder](#struktur-folder)
+8. [Kode Program Lengkap](#kode-program-lengkap)
+9. [Struktur Folder](#struktur-folder)
 
 ---
 
@@ -45,22 +46,99 @@
 
 2. **Instalasi dan Konfigurasi CodeIgniter 4.** Mengekstrak framework CodeIgniter 4 ke dalam folder `htdocs`, melakukan rename pada file `env` menjadi `.env`, dan mengubah nilai environment menjadi `development`.
 
-3. **Membuat Route.** Menambahkan baris `$routes->get('/about', 'Page::about');` pada file `app/Config/Routes.php` untuk mendefinisikan rute ke halaman About.
+3. **Membuat Route.** Menambahkan route ke halaman About, Contact, dan FAQ pada file `app/Config/Routes.php`.
 
-4. **Membuat Controller.** Membuat file `Page.php` dalam direktori `app/Controllers/` dengan class `Page` yang mewarisi `BaseController`. Setiap method (`about()`, `contact()`, `faqs()`) mereturn view yang merender halaman statis HTML.
+```php
+// app/Config/Routes.php - Route untuk halaman statis
+$routes->get('/', 'Page::index');
+$routes->get('/about', 'Page::about');
+$routes->get('/contact', 'Page::contact');
+$routes->get('/faqs', 'Page::faqs');
+$routes->get('/artikel', 'Page::artikel');
+```
 
-5. **View Layout.** Memisahkan struktur dasar HTML menjadi file `header.php` dan `footer.php` di dalam folder `Views/template/`. Halaman konten dipanggil menggunakan `<?= $this->include('template/header') ?>` dan `<?= $this->include('template/footer') ?>`.
+4. **Membuat Controller Page.** File `app/Controllers/Page.php`.
+
+```php
+<?php
+
+namespace App\Controllers;
+
+class Page extends BaseController
+{
+    public function about()
+    {
+        return view('about', [
+            'title' => 'Halaman About',
+            'content' => 'Ini adalah halaman about.'
+        ]);
+    }
+
+    public function contact()
+    {
+        return view('contact', [
+            'title' => 'Halaman Kontak',
+            'content' => 'Ini adalah halaman kontak.'
+        ]);
+    }
+
+    public function faqs()
+    {
+        return view('faqs', [
+            'title' => 'Frequently Asked Questions',
+            'content' => 'Ini adalah halaman FAQ.'
+        ]);
+    }
+}
+```
+
+5. **View Layout.** Memisahkan struktur dasar HTML menjadi `header.php` dan `footer.php`.
+
+```php
+<!-- app/Views/template/header.php -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title><?= $title; ?></title>
+    <link rel="stylesheet" href="<?= base_url('style.css'); ?>">
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <h1>Web Programming 2</h1>
+            <nav>
+                <a href="<?= base_url('/'); ?>">Home</a>
+                <a href="<?= base_url('/about'); ?>">About</a>
+                <a href="<?= base_url('/artikel'); ?>">Artikel</a>
+                <a href="<?= base_url('/contact'); ?>">Kontak</a>
+                <a href="<?= base_url('/faqs'); ?>">FAQ</a>
+            </nav>
+        </header>
+        <section id="main">
+```
+
+```php
+<!-- app/Views/template/footer.php -->
+        </section>
+        <footer>
+            <p>&copy; 2026 Universitas Pelita Bangsa</p>
+        </footer>
+    </div>
+</body>
+</html>
+```
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Lengkapi kode program untuk menu lainnya yang ada pada Controller Page, sehingga semua link pada navigasi header dapat menampilkan tampilan dengan layout yang sama.
 >
-> **Jawaban:** Telah diselesaikan dengan menambahkan method `contact()` dan `faqs()` pada file `Page.php`. Seluruh method mereturn view yang menggunakan layout template `header.php` dan `footer.php` secara seragam.
+> **Jawaban:** Telah diselesaikan dengan menambahkan method `contact()`, `faqs()`, dan `artikel()` pada `Page.php`. Seluruh method mereturn view yang menggunakan template `header.php` dan `footer.php`.
 
 ### Dokumentasi Screenshot
 
 | Halaman | Screenshot |
-|---------|------------|
+|---------|-----------|
 | Halaman Beranda (Landing Page) | ![Halaman Beranda](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_beranda.png?raw=true) |
 | Halaman About | ![Halaman About](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_halaman_about.png?raw=true) |
 
@@ -75,30 +153,141 @@
 
 ### Langkah-langkah Praktikum
 
-1. **Membuat Database.** Membuat database MySQL `lab_ci4` dan tabel `artikel` yang terdiri dari kolom `id`, `judul`, `isi`, `slug`, `gambar`, `status`, `created_at`, dan `updated_at`.
+1. **Membuat Database.** Membuat database MySQL `lab_ci4` dan tabel `artikel`.
 
-2. **Konfigurasi Koneksi Database.** Mengisi parameter koneksi database (hostname, username, password, database) pada file `.env`.
+```sql
+CREATE TABLE artikel (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    judul VARCHAR(255) NOT NULL,
+    isi TEXT,
+    slug VARCHAR(255),
+    gambar VARCHAR(255),
+    status TINYINT(1) DEFAULT 0,
+    id_kategori INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
 
-3. **Membuat Model.** Membuat file `app/Models/ArtikelModel.php` yang mendefinisikan properti `$table`, `$allowedFields`, dan `$useTimestamps`.
+2. **Konfigurasi Koneksi Database.**
 
-4. **Fungsi Read (Menampilkan Data).** Menggunakan method `$model->findAll()` pada controller `Artikel` untuk mengambil seluruh data dari tabel dan merendernya pada view `artikel/index.php`.
+```
+# .env
+database.default.hostname = localhost
+database.default.database = lab_ci4
+database.default.username = root
+database.default.password =
+database.default.DBDriver = MySQLi
+```
 
-5. **Fungsi Create (Menambahkan Data).** Membuat form `add.php` dan menangani request POST dengan validasi menggunakan `$this->validate()`. Data disimpan menggunakan `$model->insert($data)`.
+3. **Membuat Model Artikel.**
 
-6. **Fungsi Update (Mengubah Data).** Menggunakan method `$model->update($id, $data)` untuk memodifikasi record berdasarkan ID.
+```php
+<?php
 
-7. **Fungsi Delete (Menghapus Data).** Menghapus record dari database menggunakan `$model->delete($id)`.
+namespace App\Models;
 
-### Pertanyaan dan Tugas
+use CodeIgniter\Model;
 
-> **Pertanyaan:** Selesaikan programnya (CRUD) sesuai Langkah-langkah yang ada.
->
-> **Jawaban:** Seluruh fungsi CRUD untuk tabel `artikel` telah berjalan penuh dan terintegrasi dengan database. Implementasi mencakup form input, validasi server-side, upload file gambar, dan notifikasi flash message.
+class ArtikelModel extends Model
+{
+    protected $table         = 'artikel';
+    protected $primaryKey    = 'id';
+    protected $useAutoIncrement = true;
+    protected $useTimestamps    = true;
+    protected $allowedFields    = ['judul', 'isi', 'status', 'slug', 'gambar', 'id_kategori'];
+}
+```
+
+4. **Controller Artikel (CRUD).**
+
+```php
+<?php
+
+namespace App\Controllers;
+
+use App\Models\ArtikelModel;
+
+class Artikel extends BaseController
+{
+    public function index()
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->findAll();
+        return view('artikel/index', $data);
+    }
+
+    public function view($slug)
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->where('slug', $slug)->first();
+        if (!$data['artikel']) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Artikel tidak ditemukan.');
+        }
+        return view('artikel/detail', $data);
+    }
+
+    public function add()
+    {
+        if ($this->request->getMethod() === 'post') {
+            $model = new ArtikelModel();
+            $file = $this->request->getFile('gambar');
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $imageName = $file->getRandomName();
+                $file->move('uploads/gambar', $imageName);
+            }
+            $slug = url_title($this->request->getPost('judul'), '-', true);
+            $model->save([
+                'judul'  => $this->request->getPost('judul'),
+                'isi'    => $this->request->getPost('isi'),
+                'slug'   => $slug,
+                'gambar' => $imageName ?? null,
+                'id_kategori' => $this->request->getPost('id_kategori'),
+            ]);
+            session()->setFlashdata('success', 'Artikel berhasil ditambahkan.');
+            return redirect()->to('/admin/artikel');
+        }
+        return view('artikel/add');
+    }
+
+    public function edit($id)
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->find($id);
+        if ($this->request->getMethod() === 'post') {
+            $file = $this->request->getFile('gambar');
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $imageName = $file->getRandomName();
+                $file->move('uploads/gambar', $imageName);
+            }
+            $slug = url_title($this->request->getPost('judul'), '-', true);
+            $model->update($id, [
+                'judul'  => $this->request->getPost('judul'),
+                'isi'    => $this->request->getPost('isi'),
+                'slug'   => $slug,
+                'gambar' => $imageName ?? $data['artikel']['gambar'],
+                'id_kategori' => $this->request->getPost('id_kategori'),
+            ]);
+            session()->setFlashdata('success', 'Artikel berhasil diubah.');
+            return redirect()->to('/admin/artikel');
+        }
+        return view('artikel/edit', $data);
+    }
+
+    public function delete($id)
+    {
+        $model = new ArtikelModel();
+        $model->delete($id);
+        session()->setFlashdata('success', 'Artikel berhasil dihapus.');
+        return redirect()->to('/admin/artikel');
+    }
+}
+```
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
+|----------|-----------|
 | Daftar Artikel Publik | ![Daftar Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/01_user_daftar_artikel.png?raw=true) |
 | Halaman Admin - Daftar Artikel | ![Admin Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
 | Form Tambah Artikel dengan Validasi | ![Tambah Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/03_admin_tambah_validasi.png?raw=true) |
@@ -116,22 +305,79 @@
 
 ### Langkah-langkah Praktikum
 
-1. **Penerapan Layout Bawaan.** Memanfaatkan method `$this->extend('layout/main')` dan mendefinisikan `$this->section('content')` sebagai area konten yang akan dirender di dalam layout utama.
+1. **Layout Utama.** File `app/Views/layout/main.php` sebagai template induk.
 
-2. **Komponen Modular.** Memisahkan elemen UI seperti sidebar, header, dan navigasi ke dalam file terpisah untuk menghindari duplikasi kode.
+```php
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title><?= $this->renderSection('title'); ?></title>
+    <link rel="stylesheet" href="<?= base_url('style.css'); ?>">
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <h1>Web Programming 2</h1>
+            <nav>
+                <a href="<?= base_url('/'); ?>">Home</a>
+                <a href="<?= base_url('/about'); ?>">About</a>
+                <a href="<?= base_url('/artikel'); ?>">Artikel</a>
+                <a href="<?= base_url('/contact'); ?>">Kontak</a>
+                <a href="<?= base_url('/faqs'); ?>">FAQ</a>
+            </nav>
+        </header>
+        <section id="main">
+            <?= $this->renderSection('content'); ?>
+        </section>
+        <footer>
+            <p>&copy; 2026 Universitas Pelita Bangsa</p>
+        </footer>
+    </div>
+</body>
+</html>
+```
 
-3. **Konfigurasi View Cell.** Menggunakan pemanggilan View Cell seperti `view_cell('ArtikelTerkini::render')` untuk merender komponen yang memerlukan logika server-side secara modular.
+2. **View yang Menggunakan Layout.**
 
-### Pertanyaan dan Tugas
+```php
+<!-- app/Views/about.php -->
+<?= $this->extend('layout/main'); ?>
 
-> **Pertanyaan:** Implementasikan sistem Layouting pada project Anda.
->
-> **Jawaban:** Seluruh view pada aplikasi kini menggunakan sistem pewarisan layout. File `Views/layout/main.php` menjadi template utama, sedangkan setiap halaman konten hanya mendefinisikan section `content` yang akan dirender di dalamnya.
+<?= $this->section('title'); ?>About<?= $this->endSection(); ?>
+
+<?= $this->section('content'); ?>
+<div class="about">
+    <h2>About</h2>
+    <p><?= $content; ?></p>
+</div>
+<?= $this->endSection(); ?>
+```
+
+3. **View Cell untuk Komponen Dinamis.**
+
+```php
+<?php
+
+namespace App\Cells;
+
+use App\Models\ArtikelModel;
+
+class ArtikelTerkini
+{
+    public function render(): string
+    {
+        $model = new ArtikelModel();
+        $artikel = $model->where('status', 1)->orderBy('created_at', 'DESC')->findAll(5);
+        return view('cells/artikel_terkini', ['artikel' => $artikel]);
+    }
+}
+```
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
+|----------|-----------|
 | Halaman About dengan Layout dan Sidebar | ![About Layout](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_halaman_about.png?raw=true) |
 
 ---
@@ -144,27 +390,123 @@ Mahasiswa mampu membuat sistem autentikasi pengguna menggunakan Session bawaan C
 
 ### Langkah-langkah Praktikum
 
-1. **Membuat Tabel User.** Membuat tabel `user` di database dengan kolom `id`, `username`, `useremail`, dan `userpassword`. Membuat file `app/Models/UserModel.php` sebagai model untuk tabel tersebut.
+1. **Tabel User.**
 
-2. **Database Seeder.** Mengisi data admin awal menggunakan perintah CLI: `php spark make:seeder UserSeeder`, kemudian menjalankan `php spark db:seed UserSeeder` untuk memasukkan record admin ke database.
+```sql
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    useremail VARCHAR(200) NOT NULL,
+    userpassword VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
 
-3. **Controller Login.** Membuat file `app/Controllers/User.php` yang menangani proses autentikasi. Method `login()` memvalidasi kredensial dengan `password_verify()` dan menyimpan session `logged_in` apabila autentikasi berhasil.
+2. **User Model.**
 
-4. **Route Filter.** Membuat file `app/Filters/Auth.php` yang memeriksa keberadaan session `logged_in`. Apabila session tidak ditemukan, pengguna di-redirect ke halaman login. Filter ini didaftarkan pada `app/Config/Filters.php` dan diterapkan pada grup route admin.
+```php
+<?php
 
-### Pertanyaan dan Tugas
+namespace App\Models;
 
-> **Pertanyaan:** Selesaikan program Login sesuai langkah-langkah.
->
-> **Jawaban:** Panel admin telah diamankan menggunakan Filter autentikasi. Setiap akses ke halaman admin tanpa sesi login yang valid akan ditolak dan diarahkan ke halaman login. Seluruh kredensial admin disimpan dalam bentuk hash (bcrypt) di database.
+use CodeIgniter\Model;
+
+class UserModel extends Model
+{
+    protected $table         = 'user';
+    protected $primaryKey    = 'id';
+    protected $useAutoIncrement = true;
+    protected $useTimestamps    = true;
+    protected $allowedFields = ['username', 'useremail', 'userpassword'];
+}
+```
+
+3. **Controller Login.**
+
+```php
+<?php
+
+namespace App\Controllers;
+
+use App\Models\UserModel;
+
+class User extends BaseController
+{
+    public function login()
+    {
+        if ($this->request->getMethod() === 'post') {
+            $model = new UserModel();
+            $user = $model->where('useremail', $this->request->getPost('email'))->first();
+            if ($user && password_verify($this->request->getPost('password'), $user['userpassword'])) {
+                session()->set([
+                    'logged_in' => true,
+                    'username'  => $user['username'],
+                ]);
+                session()->setFlashdata('success', 'Login berhasil.');
+                return redirect()->to('/admin/artikel');
+            }
+            session()->setFlashdata('error', 'Email atau password salah.');
+            return redirect()->to('/user/login');
+        }
+        return view('user/login');
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/user/login');
+    }
+}
+```
+
+4. **Auth Filter.**
+
+```php
+<?php
+
+namespace App\Filters;
+
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Filters\FilterInterface;
+
+class Auth implements FilterInterface
+{
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        if (!session()->get('logged_in')) {
+            session()->setFlashdata('error', 'Silakan login terlebih dahulu.');
+            return redirect()->to('/user/login');
+        }
+    }
+
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null) {}
+}
+```
+
+5. **Route dengan Filter Auth.**
+
+```php
+$routes->group('admin', ['filter' => 'auth'], function($routes) {
+    $routes->get('artikel', 'Artikel::admin_index');
+    $routes->get('artikel/add', 'Artikel::add');
+    $routes->post('artikel', 'Artikel::add');
+    $routes->get('artikel/edit/(:num)', 'Artikel::edit/$1');
+    $routes->post('artikel/edit/(:num)', 'Artikel::edit/$1');
+    $routes->get('artikel/delete/(:num)', 'Artikel::delete/$1');
+});
+```
+
+**Kredensial Admin:**
+- Email: `admin@email.com`
+- Password: `admin123`
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
-| Halaman Login | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
-
-*Catatan: Screenshot form login dapat diambil pada URL `http://localhost:8080/user/login` dengan kredensial admin@email.com / admin123.*
+|----------|-----------|
+| Halaman Login Admin | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
 
 ---
 
@@ -178,22 +520,46 @@ Mahasiswa mampu membuat sistem autentikasi pengguna menggunakan Session bawaan C
 
 ### Langkah-langkah Praktikum
 
-1. **Instansiasi Pager.** Menggunakan method `$model->paginate(10)` pada controller `Artikel` untuk membatasi jumlah data yang ditampilkan per halaman.
+1. **Implementasi Pagination + Search di Controller.**
 
-2. **Fungsi Pencarian.** Menangkap parameter pencarian `q` dari query string menggunakan `$this->request->getGet('q')`, kemudian menerapkannya pada query builder dengan method `like('judul', $q)`.
+```php
+public function index()
+{
+    $model = new ArtikelModel();
+    $keyword = $this->request->getGet('q');
+    if ($keyword) {
+        $model->like('judul', $keyword);
+    }
+    $data = [
+        'artikel' => $model->paginate(10),
+        'pager'   => $model->pager,
+        'keyword' => $keyword,
+    ];
+    return view('artikel/index', $data);
+}
+```
 
-3. **Tautan Paginasi di View.** Merender navigasi halaman pada view admin menggunakan `<?= $pager->only(['q'])->links() ?>`, sehingga parameter pencarian tetap dipertahankan saat berpindah halaman.
+2. **Navigasi Pagination di View.**
 
-### Pertanyaan dan Tugas
+```php
+<div class="pagination">
+    <?= $pager->only(['q'])->links(); ?>
+</div>
+```
 
-> **Pertanyaan:** Selesaikan programnya sesuai Langkah-langkah yang ada. Anda boleh melakukan improvisasi.
->
-> **Jawaban:** Pagination dan fitur pencarian telah terintegrasi penuh. Ketika pengguna mengetikkan kata kunci pencarian, data difilter berdasarkan judul artikel dan hasilnya tetap ditampilkan dalam format paginasi berkat penggunaan fungsi `only(['q'])` pada pager.
+3. **Form Pencarian.**
+
+```php
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Cari artikel..." value="<?= $keyword ?? ''; ?>">
+    <button type="submit">Cari</button>
+</form>
+```
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
+|----------|-----------|
 | Pagination dan Pencarian | ![Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
 
 ---
@@ -202,33 +568,70 @@ Mahasiswa mampu membuat sistem autentikasi pengguna menggunakan Session bawaan C
 
 ### Tujuan Praktikum
 
-1. Mahasiswa mampu memahami relasi antar tabel database (tabel Artikel dengan tabel Kategori).
-2. Mahasiswa mampu memodifikasi layout agar bersifat dinamis menggunakan View Cell.
+1. Mahasiswa mampu memahami relasi antar tabel database.
+2. Mahasiswa mampu memodifikasi layout agar dinamis menggunakan View Cell.
 
 ### Langkah-langkah Praktikum
 
-1. **Membuat Tabel Kategori.** Membuat tabel `kategori` dengan kolom `id` dan `nama_kategori`. Menambahkan kolom `id_kategori` pada tabel `artikel` sebagai foreign key.
+1. **Tabel Kategori.**
 
-2. **View Cell untuk Kategori.** Membuat View Cell `app/Cells/KategoriList.php` untuk merender daftar kategori secara dinamis dari database, bukan hardcode HTML.
+```sql
+CREATE TABLE kategori (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_kategori VARCHAR(100) NOT NULL,
+    slug_kategori VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
-3. **Relasi Database dengan JOIN.** Memodifikasi fungsi `view($slug)` pada controller `Artikel` untuk melakukan query JOIN antara tabel `artikel` dan `kategori`, sehingga nama kategori dapat ditampilkan pada halaman detail artikel.
+INSERT INTO kategori (nama_kategori, slug_kategori) VALUES
+('Artificial Intelligence', 'artificial-intelligence'),
+('Jaringan Komputer', 'jaringan-komputer'),
+('Pendidikan', 'pendidikan');
+```
 
-4. **Injeksi Data Kategori.** Menyuntikkan data `nama_kategori` ke dalam view `detail.php` agar dapat ditampilkan kepada pengguna.
+2. **Kategori Model.**
 
-### Pertanyaan dan Tugas
+```php
+<?php
 
-> **Pertanyaan:**
-> 1. Selesaikan semua langkah praktikum di atas.
-> 2. Modifikasi tampilan detail artikel (`artikel/detail.php`) untuk menampilkan nama kategori artikel.
-> 3. Tambahkan fitur untuk menampilkan daftar kategori di halaman depan (opsional).
-> 4. Buat fungsi untuk menampilkan artikel berdasarkan kategori tertentu (opsional).
->
-> **Jawaban:** Data `nama_kategori` berhasil diambil melalui operasi JOIN antar tabel dan ditampilkan pada halaman detail artikel. View Cell di sidebar menampilkan daftar kategori secara dinamis, dan pengguna dapat memfilter artikel berdasarkan kategori yang dipilih.
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class KategoriModel extends Model
+{
+    protected $table         = 'kategori';
+    protected $primaryKey    = 'id';
+    protected $useAutoIncrement = true;
+    protected $useTimestamps    = true;
+    protected $allowedFields    = ['nama_kategori', 'slug_kategori'];
+}
+```
+
+3. **Relasi JOIN untuk Detail Artikel.**
+
+```php
+public function view($slug)
+{
+    $model = new ArtikelModel();
+    $artikel = $model
+        ->select('artikel.*, kategori.nama_kategori')
+        ->join('kategori', 'kategori.id = artikel.id_kategori', 'left')
+        ->where('artikel.slug', $slug)
+        ->first();
+
+    if (!$artikel) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException('Artikel tidak ditemukan.');
+    }
+    return view('artikel/detail', ['artikel' => $artikel]);
+}
+```
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
+|----------|-----------|
 | Detail Artikel dengan Informasi Kategori | ![Detail Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/01_user_daftar_artikel.png?raw=true) |
 
 ---
@@ -238,34 +641,183 @@ Mahasiswa mampu membuat sistem autentikasi pengguna menggunakan Session bawaan C
 ### Tujuan Praktikum
 
 1. Mahasiswa mampu memahami prinsip kerja AJAX (Asynchronous JavaScript and XML).
-2. Mahasiswa mampu mengimplementasikan pemuatan data artikel secara asinkron tanpa reload halaman.
+2. Mahasiswa mampu mengimplementasikan pemuatan data secara asinkron.
 
 ### Langkah-langkah Praktikum
 
-1. **Backend Response JSON.** Memodifikasi controller `Artikel` agar mendeteksi permintaan AJAX menggunakan `$this->request->isAJAX()`. Apabila terdeteksi sebagai AJAX, server mereturn data dalam format JSON.
+1. **Controller AJAX.**
 
-2. **Fungsi AJAX JavaScript.** Membuat skrip jQuery untuk mengambil data artikel secara asinkron menggunakan `$.ajax()`. Fungsi `fetchData()` dipanggil saat halaman dimuat dan saat tombol pagination diklik.
+```php
+<?php
 
-3. **Sorting Data.** Menambahkan event handler pada header kolom tabel untuk mengurutkan data berdasarkan judul (ASC/DESC) tanpa reload halaman.
+namespace App\Controllers;
 
-4. **Indikator Loading.** Menampilkan animasi spinner atau teks loading saat permintaan AJAX sedang diproses oleh server.
+use App\Models\ArtikelModel;
 
-### Pertanyaan dan Tugas
+class AjaxController extends BaseController
+{
+    public function index()
+    {
+        return view('ajax/index', ['title' => 'Data Artikel (AJAX)']);
+    }
 
-> **Pertanyaan:**
-> 1. Selesaikan semua langkah praktikum di atas.
-> 2. Modifikasi tampilan data artikel dan pagination sesuai kebutuhan desain.
-> 3. Tambahkan indikator loading saat data sedang diambil dari server.
-> 4. Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul) dengan AJAX.
->
-> **Jawaban:** Seluruh tugas telah diselesaikan. Data artikel dimuat secara asinkron melalui AJAX dengan dukungan pagination dan sorting. Indikator loading muncul saat proses pengambilan data berlangsung. Pengguna dapat mengurutkan data berdasarkan judul tanpa mengalami reload halaman.
+    public function getData()
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->findAll();
+        return $this->response->setJSON($data);
+    }
+}
+```
+
+2. **View AJAX dengan jQuery.**
+
+```html
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: '<?= base_url("ajax/getData") ?>',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            var html = '';
+            $.each(response.artikel, function(i, row) {
+                html += '<tr>';
+                html += '<td>' + row.id + '</td>';
+                html += '<td>' + row.judul + '</td>';
+                html += '<td>' + (row.status == 1 ? 'Published' : 'Draft') + '</td>';
+                html += '<td><a href="<?= base_url('admin/artikel/edit/') ?>' + row.id + '">Edit</a></td>';
+                html += '</tr>';
+            });
+            $('#artikel-list').html(html);
+        },
+        error: function() {
+            $('#artikel-list').html('<tr><td colspan="4">Gagal memuat data.</td></tr>');
+        }
+    });
+});
+</script>
+```
+
+3. **Route AJAX + REST API.**
+
+```php
+$routes->get('/ajax', 'AjaxController::index');
+$routes->get('/ajax/getData', 'AjaxController::getData');
+$routes->resource('post');
+```
+
+4. **REST API Controller (Post.php).**
+
+```php
+<?php
+
+namespace App\Controllers;
+
+use CodeIgniter\RESTful\ResourceController;
+use App\Models\ArtikelModel;
+
+class Post extends ResourceController
+{
+    use \CodeIgniter\API\ResponseTrait;
+
+    // GET /post - Tampilkan semua artikel
+    public function index()
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->orderBy('id', 'DESC')->findAll();
+        return $this->respond($data);
+    }
+
+    // GET /post/{id} - Tampilkan satu artikel
+    public function show($id = null)
+    {
+        $model = new ArtikelModel();
+        $data = $model->where('id', $id)->first();
+        if ($data) {
+            return $this->respond($data);
+        }
+        return $this->failNotFound('Data tidak ditemukan.');
+    }
+
+    // POST /post - Tambah artikel baru
+    public function create()
+    {
+        $model = new ArtikelModel();
+        $data = [
+            'judul' => $this->request->getVar('judul'),
+            'isi'   => $this->request->getVar('isi'),
+        ];
+        $model->insert($data);
+        return $this->respondCreated([
+            'status' => 201,
+            'messages' => ['success' => 'Data artikel berhasil ditambahkan.']
+        ]);
+    }
+
+    // PUT /post/{id} - Update artikel
+    public function update($id = null)
+    {
+        $model = new ArtikelModel();
+        $rawData = $this->request->getRawInput();
+        $id = $rawData['id'] ?? $id;
+        $data = [
+            'judul' => $rawData['judul'] ?? $this->request->getVar('judul'),
+            'isi'   => $rawData['isi'] ?? $this->request->getVar('isi'),
+        ];
+        $data = array_filter($data, function($v) { return $v !== null; });
+        $model->update($id, $data);
+        return $this->respond([
+            'status' => 200,
+            'messages' => ['success' => 'Data artikel berhasil diubah.']
+        ]);
+    }
+
+    // DELETE /post/{id} - Hapus artikel
+    public function delete($id = null)
+    {
+        $model = new ArtikelModel();
+        $data = $model->find($id);
+        if ($data) {
+            $model->delete($id);
+            return $this->respondDeleted([
+                'status' => 200,
+                'messages' => ['success' => 'Data artikel berhasil dihapus.']
+            ]);
+        }
+        return $this->failNotFound('Data tidak ditemukan.');
+    }
+}
+```
 
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
-|----------|------------|
-| Tabel Artikel dengan AJAX dan Pagination | ![AJAX Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/08_ajax_data_artikel.png?raw=true) |
+|----------|-----------|
+| Tabel Artikel dengan AJAX | ![AJAX Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/08_ajax_data_artikel.png?raw=true) |
 | Response JSON Endpoint API | ![API JSON](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/07_api_json_response.png?raw=true) |
+
+---
+
+## Kode Program Lengkap
+
+Untuk melihat kode program secara lengkap, silakan akses file-file berikut pada repositori:
+
+| File | Path | Keterangan |
+|------|------|-----------|
+| Controller Page | `app/Controllers/Page.php` | Controller halaman statis (About, Contact, FAQ) |
+| Controller Artikel | `app/Controllers/Artikel.php` | Controller CRUD artikel |
+| Controller User | `app/Controllers/User.php` | Controller login/logout |
+| Controller Post | `app/Controllers/Post.php` | REST API ResourceController |
+| Controller AJAX | `app/Controllers/AjaxController.php` | Controller endpoint AJAX |
+| Model Artikel | `app/Models/ArtikelModel.php` | Model tabel artikel |
+| Model Kategori | `app/Models/KategoriModel.php` | Model tabel kategori |
+| Model User | `app/Models/UserModel.php` | Model tabel user |
+| Filter Auth | `app/Filters/Auth.php` | Filter autentikasi admin |
+| Routes | `app/Config/Routes.php` | Definisi seluruh route |
+| Layout Utama | `app/Views/layout/main.php` | Template layout induk |
+| View AJAX | `app/Views/ajax/index.php` | Halaman AJAX dengan jQuery |
 
 ---
 
@@ -276,13 +828,20 @@ Lab7Web/
 ├── ci4/                                # CodeIgniter 4 Framework
 │   ├── app/
 │   │   ├── Config/                     # Konfigurasi Routes, Filters, Database
-│   │   ├── Controllers/                # Page, Artikel, User, Post
+│   │   ├── Controllers/                # Page, Artikel, User, Post, AjaxController
 │   │   ├── Models/                     # ArtikelModel, UserModel, KategoriModel
 │   │   ├── Views/                      # Template, Layout, View komponen
+│   │   │   ├── template/               # header.php, footer.php
+│   │   │   ├── layout/                 # main.php (layout induk)
+│   │   │   ├── cells/                  # artikel_terkini.php, kategori_list.php
+│   │   │   ├── artikel/                # index, detail, admin_index, add, edit
+│   │   │   ├── ajax/                   # index.php
+│   │   │   └── user/                   # login.php
 │   │   ├── Cells/                      # View Cell (ArtikelTerkini, KategoriList)
 │   │   └── Filters/                    # Auth, ApiAuthFilter
-│   ├── public/                         # Entry point, style.css, uploads/gambar/
-│   ├── router.php                      # CORS handler untuk php built-in server
+│   ├── public/                         # Entry point, style.css
+│   │   └── uploads/gambar/             # Upload file gambar artikel
+│   ├── router.php                      # CORS handler
 │   └── ...
 ├── Secrenshoot/                        # Dokumentasi screenshot praktikum
 └── README.md
@@ -292,4 +851,3 @@ Lab7Web/
 
 **(c) 2026 Muhammad Arkhamullah R.A - Laporan Praktikum Pemrograman Web 2**  
 **Program Studi Teknik Informatika - Universitas Pelita Bangsa**
-

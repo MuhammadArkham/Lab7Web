@@ -29,6 +29,8 @@ Repositori ini memuat pengerjaan **Modul 1-6 dan Modul 9** Praktikum Pemrograman
 5. [Praktikum 5: Pagination dan Pencarian](#praktikum-5-pagination-dan-pencarian)
 6. [Praktikum 6: Pencarian Lanjutan dan Relasi Tabel](#praktikum-6-pencarian-lanjutan-dan-relasi-tabel)
 7. [Praktikum 9: AJAX & Real-time Pagination](#praktikum-9-ajax--real-time-pagination)
+8. [Daftar Perbaikan Bug](#daftar-perbaikan-bug)
+9. [Template Screenshot](#template-screenshot)
 
 ---
 
@@ -252,6 +254,101 @@ Meningkatkan User Experience secara dramatis dengan membuat Web beroperasi seper
 
 ---
 
+## Daftar Perbaikan Bug
+
+Pada tahap akhir pengembangan, dilakukan serangkaian perbaikan bug untuk memastikan aplikasi berjalan dengan stabil dan aman. Berikut daftar perbaikan yang telah dilakukan:
+
+### 1. Perbaikan Upload File — `getRandomName()`
+
+**Lokasi:** `ci4/app/Controllers/Artikel.php` (method `save` dan `update`)
+
+**Masalah:** File gambar yang diupload menggunakan `getName()` sehingga nama file asli dari client tetap dipertahankan. Akibatnya, jika dua user mengupload file dengan nama yang sama, file sebelumnya akan tertimpa (*overwrite*).
+
+**Perbaikan:** Mengganti `$file->getName()` menjadi `$file->getRandomName()` agar setiap file yang diupload mendapatkan nama unik (hash + timestamp). Konflik nama file tidak lagi terjadi.
+
+### 2. Perbaikan Filter Artikel Publik — `WHERE status=1`
+
+**Lokasi:** `ci4/app/Controllers/Page.php` (method `artikel`)
+
+**Masalah:** Halaman daftar artikel publik menampilkan semua artikel termasuk yang berstatus draft (`status=0`).
+
+**Perbaikan:** Menambahkan filter `$artikel->where('status', 1)` pada query di controller publik (`Page::artikel()`). Hanya artikel dengan status `1` (published) yang muncul di halaman publik.
+
+### 3. Perbaikan Namespace `ApiAuthFilter`
+
+**Lokasi:** `ci4/app/Filters/ApiAuthFilter.php`
+
+**Masalah:** Terdapat kesalahan penulisan namespace `CodeIgniter\Http` yang seharusnya `CodeIgniter\HTTP` (menggunakan huruf kapital "HTTP"). Akibatnya, PHP melempar *Fatal Error* karena class `RequestInterface` dan `ResponseInterface` tidak ditemukan.
+
+**Perbaikan:** Mengubah seluruh referensi namespace dari `CodeIgniter\Http` menjadi `CodeIgniter\HTTP` pada import `RequestInterface` dan `ResponseInterface`.
+
+### 4. Penambahan Route OPTIONS untuk CORS Preflight
+
+**Lokasi:** `ci4/app/Config/Routes.php`
+
+**Masalah:** Endpoint API (`api/login`, `api/post`, `api/post/(:segment)`) tidak memiliki handler untuk method `OPTIONS`. Ketika browser (atau tools seperti Postman dengan CORS) mengirimkan preflight request `OPTIONS`, server merespon dengan 404.
+
+**Perbaikan:** Menambahkan route `$routes->options(...)` untuk ketiga endpoint API tersebut sehingga preflight request mendapat respon `200 OK`.
+
+```php
+$routes->options('api/login', function () { return ''; });
+$routes->options('api/post', function () { return ''; });
+$routes->options('api/post/(:segment)', function () { return ''; });
+```
+
+### 5. Pembuatan `router.php` untuk CORS pada PHP Built-in Server
+
+**Lokasi:** `ci4/router.php`
+
+**Masalah:** Saat menjalankan aplikasi dengan `php -S localhost:8080` (PHP Built-in Server), server tidak mengirimkan header CORS (`Access-Control-Allow-Origin`, dll.) secara otomatis. Request dari origin berbeda akan ditolak browser.
+
+**Perbaikan:** Membuat file `router.php` yang menangani preflight OPTIONS request dan menyisipkan header CORS ke setiap response sebelum melanjutkan ke router CI4.
+
+### 6. Aktivasi `useTimestamps=true` pada Model
+
+**Lokasi:** `ci4/app/Models/ArtikelModel.php`, `KategoriModel.php`, `UserModel.php`
+
+**Masalah:** Tiga model utama belum mengaktifkan fitur *auto-timestamps* bawaan CI4 (`useTimestamps`). Kolom `created_at` dan `updated_at` tidak terisi secara otomatis saat insert/update.
+
+**Perbaikan:** Menambahkan properti `protected $useTimestamps = true;` pada `ArtikelModel`, `KategoriModel`, dan `UserModel`. CI4 kini secara otomatis mengisi `created_at` (saat insert) dan `updated_at` (saat update).
+
+### 7. Perubahan Timezone ke Asia/Jakarta
+
+**Lokasi:** `ci4/app/Config/App.php`
+
+**Masalah:** Timezone aplikasi masih menggunakan default UTC. Semua timestamp (`created_at`, `updated_at`) tercatat dalam waktu UTC yang berbeda 7 jam dengan waktu lokal Indonesia.
+
+**Perbaikan:** Mengubah `$appTimezone` dari `'UTC'` menjadi `'Asia/Jakarta'` (WIB). Seluruh pencatatan waktu kini sesuai dengan zona waktu Indonesia.
+
+---
+
+## Template Screenshot
+
+Berikut adalah daftar screenshot yang wajib dilampirkan dalam laporan akhir praktikum. Setiap screenshot harus diambil dari aplikasi yang sudah berjalan dan menampilkan hasil setelah seluruh perbaikan bug diterapkan.
+
+| No | Halaman / Fitur | URL / Lokasi | Keterangan | Status Screenshot |
+|----|----------------|--------------|------------|-------------------|
+| 1 | Halaman Home/Landing | `/` | Tampilan halaman utama website | Belum ada |
+| 2 | Halaman About | `/about` | Halaman about dengan layout dan sidebar | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080933.png?raw=true) |
+| 3 | Halaman Artikel Publik | `/artikel` | Daftar artikel yang sudah dipublikasikan (status=1) | Belum ada |
+| 4 | Halaman Detail Artikel | `/artikel/{slug}` | Detail artikel lengkap dengan kategori | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true) |
+| 5 | Halaman Login | `/user/login` | Form login admin | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20091948.png?raw=true) |
+| 6 | Halaman Admin Artikel | `/admin/artikel` | Tabel daftar artikel di panel admin | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080019.png?raw=true) |
+| 7 | Halaman Tambah Artikel | `/admin/artikel/add` | Form tambah artikel dengan form upload gambar | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080151.png?raw=true) |
+| 8 | Halaman Edit Artikel | `/admin/artikel/edit/{id}` | Form edit artikel dengan data terisi | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true) |
+| 9 | Halaman AJAX Artikel | `/ajax` | Tabel AJAX dengan pagination dan sorting | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true) |
+| 10 | Halaman API Post (JSON) | `GET /post` | Output JSON endpoint API di browser atau Postman | Belum ada |
+| 11 | Database Tables | phpMyAdmin | Struktur tabel `artikel`, `kategori`, dan `user` | Belum ada |
+
+### Catatan Pengambilan Screenshot
+
+- **Nomor 1, 3, 10, 11** belum memiliki screenshot. Silakan lengkapi dengan mengambil gambar dari aplikasi yang sudah berjalan.
+- **Screenshot yang sudah ada** dapat digunakan kembali atau diambil ulang jika tampilan berubah setelah perbaikan bug.
+- Semua screenshot disimpan di folder `Secrenshoot/` pada root repositori dengan format nama: `Screenshot YYYY-MM-DD HHMMSS.png`.
+- URL screenshot di README menggunakan format raw GitHub: `https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/<nama-file>?raw=true`.
+
+---
+
 ## Struktur Folder
 
 ```
@@ -260,11 +357,12 @@ Lab7Web/
 │   ├── app/
 │   │   ├── Config/                     # Konfigurasi Routes, Filters, Database
 │   │   ├── Controllers/                # Page, Artikel, User
-│   │   ├── Models/                     # ArtikelModel, UserModel
+│   │   ├── Models/                     # ArtikelModel, UserModel, KategoriModel
 │   │   ├── Views/                      # Template, Layout, View komponen
 │   │   ├── Cells/                      # View Cell (ArtikelTerkini, KategoriList)
-│   │   └── Filters/                    # AuthFilter
+│   │   └── Filters/                    # Auth, ApiAuthFilter
 │   ├── public/                         # Entry point, style.css, uploads/
+│   ├── router.php                      # CORS handler untuk php built-in server
 │   └── ...
 ├── Secrenshoot/                        # Dokumentasi screenshot praktikum
 └── README.md

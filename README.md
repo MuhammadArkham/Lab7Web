@@ -1,4 +1,4 @@
-# Laporan Praktikum Pemrograman Web - Lab7Web
+# Laporan Praktikum Pemrograman Web 2 - Lab7Web
 
 ![PHP](https://img.shields.io/badge/PHP-8.1-%23777BB4?style=flat&logo=php)
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-4-%23EF4223?style=flat&logo=codeigniter)
@@ -9,14 +9,13 @@
 
 ---
 
-**Mata Kuliah:** Pemrograman Web 2
-**Nama:** Muhammad Arkhamullah R.A
-**NIM:** 312410545
-**Kelas:** I241E
-
----
-
-Repositori ini memuat pengerjaan **Modul 1-6 dan Modul 9** Praktikum Pemrograman Web menggunakan **Framework CodeIgniter 4 (CI4)**. Seluruh modul mencakup konsep dasar PHP Framework hingga implementasi AJAX dan Real-time Pagination.
+**Mata Kuliah:** Pemrograman Web 2  
+**Dosen Pengampu:** Agung Nugroho, S.Kom., M.Kom.  
+**Nama:** Muhammad Arkhamullah R.A  
+**NIM:** 312410545  
+**Kelas:** I241E  
+**Program Studi:** Teknik Informatika  
+**Universitas Pelita Bangsa**
 
 ---
 
@@ -25,12 +24,11 @@ Repositori ini memuat pengerjaan **Modul 1-6 dan Modul 9** Praktikum Pemrograman
 1. [Praktikum 1: PHP Framework (CodeIgniter)](#praktikum-1-php-framework-codeigniter)
 2. [Praktikum 2: Framework Lanjutan (CRUD)](#praktikum-2-framework-lanjutan-crud)
 3. [Praktikum 3: View Layout dan View Cell](#praktikum-3-view-layout-dan-view-cell)
-4. [Praktikum 4: Framework Lanjutan (Modul Login & Register)](#praktikum-4-framework-lanjutan-modul-login--register)
+4. [Praktikum 4: Framework Lanjutan (Modul Login)](#praktikum-4-framework-lanjutan-modul-login)
 5. [Praktikum 5: Pagination dan Pencarian](#praktikum-5-pagination-dan-pencarian)
 6. [Praktikum 6: Pencarian Lanjutan dan Relasi Tabel](#praktikum-6-pencarian-lanjutan-dan-relasi-tabel)
-7. [Praktikum 9: AJAX & Real-time Pagination](#praktikum-9-ajax--real-time-pagination)
-8. [Daftar Perbaikan Bug](#daftar-perbaikan-bug)
-9. [Template Screenshot](#template-screenshot)
+7. [Praktikum 9: AJAX dan Real-time Pagination](#praktikum-9-ajax-dan-real-time-pagination)
+8. [Struktur Folder](#struktur-folder)
 
 ---
 
@@ -38,32 +36,33 @@ Repositori ini memuat pengerjaan **Modul 1-6 dan Modul 9** Praktikum Pemrograman
 
 ### Tujuan Praktikum
 
-1. Memahami konsep dasar Framework dan pola MVC (Model-View-Controller).
-2. Mampu menggunakan Framework CodeIgniter 4 untuk membuat program web sederhana.
+1. Mahasiswa mampu memahami konsep dasar Framework dan pola MVC (Model-View-Controller).
+2. Mahasiswa mampu menggunakan Framework CodeIgniter 4 untuk membuat program web sederhana.
 
 ### Langkah-langkah Praktikum
 
-Pada modul ini dilakukan instalasi CI4 dan pembuatan Routes dan Controller pertama.
+1. **Mengaktifkan Ekstensi PHP.** Membuka file `php.ini` pada direktori PHP kemudian mengaktifkan ekstensi `intl` dan `mbstring` dengan menghapus tanda titik koma (`;`) pada baris ekstensi yang sesuai.
 
-1. **Mengaktifkan Ekstensi PHP**: Membuka `php.ini` lalu mengaktifkan `intl` dan `mbstring`.
-2. **Instalasi dan Konfigurasi**: Mengekstrak CI4, me-rename `.env`, dan mengubah environment menjadi `development`.
-3. **Membuat Route**: Menambahkan `$routes->get('/about', 'Page::about');` di `Routes.php`.
-4. **Membuat Controller Page**: Membangun class `Page` yang mewarisi `BaseController` untuk merender tampilan statis HTML seperti `about`, `contact`, dan `faqs`.
-5. **View Layout**: Memisahkan struktur dasar HTML menjadi `header.php` dan `footer.php` agar dapat dipanggil menggunakan `<?= $this->include('template/header'); ?>`.
+2. **Instalasi dan Konfigurasi CodeIgniter 4.** Mengekstrak framework CodeIgniter 4 ke dalam folder `htdocs`, melakukan rename pada file `env` menjadi `.env`, dan mengubah nilai environment menjadi `development`.
+
+3. **Membuat Route.** Menambahkan baris `$routes->get('/about', 'Page::about');` pada file `app/Config/Routes.php` untuk mendefinisikan rute ke halaman About.
+
+4. **Membuat Controller.** Membuat file `Page.php` dalam direktori `app/Controllers/` dengan class `Page` yang mewarisi `BaseController`. Setiap method (`about()`, `contact()`, `faqs()`) mereturn view yang merender halaman statis HTML.
+
+5. **View Layout.** Memisahkan struktur dasar HTML menjadi file `header.php` dan `footer.php` di dalam folder `Views/template/`. Halaman konten dipanggil menggunakan `<?= $this->include('template/header') ?>` dan `<?= $this->include('template/footer') ?>`.
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Lengkapi kode program untuk menu lainnya yang ada pada Controller Page, sehingga semua link pada navigasi header dapat menampilkan tampilan dengan layout yang sama.
 >
-> **Jawaban:** Telah diselesaikan. Method `contact()`, `faqs()`, dan `artikel()` ditambahkan ke `Page.php`. Setiap method mereturn view yang membungkus (include) layout dinamis `header.php` dan `footer.php` secara seragam.
+> **Jawaban:** Telah diselesaikan dengan menambahkan method `contact()` dan `faqs()` pada file `Page.php`. Seluruh method mereturn view yang menggunakan layout template `header.php` dan `footer.php` secara seragam.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
-| Halaman | Tampilan |
-|---------|----------|
-| Halaman About | ![Halaman About](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20074752.png?raw=true) |
-| Halaman Kontak | ![Halaman Kontak](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20074838.png?raw=true) |
-| Halaman FAQ | ![Halaman FAQ](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20074904.png?raw=true) |
+| Halaman | Screenshot |
+|---------|------------|
+| Halaman Beranda (Landing Page) | ![Halaman Beranda](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_beranda.png?raw=true) |
+| Halaman About | ![Halaman About](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_halaman_about.png?raw=true) |
 
 ---
 
@@ -71,35 +70,40 @@ Pada modul ini dilakukan instalasi CI4 dan pembuatan Routes dan Controller perta
 
 ### Tujuan Praktikum
 
-1. Memahami konsep dasar Model di CI4.
-2. Memahami konsep dasar Sistem CRUD (Create, Read, Update, Delete).
+1. Mahasiswa mampu memahami konsep dasar Model dalam arsitektur CI4.
+2. Mahasiswa mampu mengimplementasikan sistem CRUD (Create, Read, Update, Delete).
 
 ### Langkah-langkah Praktikum
 
-Fokus utama adalah manajemen basis data (Database) dari antarmuka Web.
+1. **Membuat Database.** Membuat database MySQL `lab_ci4` dan tabel `artikel` yang terdiri dari kolom `id`, `judul`, `isi`, `slug`, `gambar`, `status`, `created_at`, dan `updated_at`.
 
-1. **Membuat Database**: Membuat database MySQL `lab_ci4` dan tabel `artikel` yang berisi `id`, `judul`, `isi`, `gambar`, dan lain-lain.
-2. **Konfigurasi Koneksi**: Mengisi database credentials pada file `.env`.
-3. **Membuat Model**: Membuat file `ArtikelModel.php` yang mendefinisikan tabel dan kolom-kolom yang diizinkan untuk diubah (`allowedFields`).
-4. **Fungsi Read (Tampil Data)**: Menggunakan method `$model->findAll()` pada `Artikel` controller untuk merender data pada `artikel/index.php`.
-5. **Fungsi Create (Tambah Data)**: Membuat form `add.php` dan menangani POST request dengan validasi `$this->validate()` sebelum disisipkan menggunakan `$model->insert()`.
-6. **Fungsi Update (Ubah Data)**: Menggunakan `$model->update()` berdasarkan identitas ID.
-7. **Fungsi Delete (Hapus Data)**: Memicu pemusnahan record menggunakan `$model->delete($id)`.
+2. **Konfigurasi Koneksi Database.** Mengisi parameter koneksi database (hostname, username, password, database) pada file `.env`.
+
+3. **Membuat Model.** Membuat file `app/Models/ArtikelModel.php` yang mendefinisikan properti `$table`, `$allowedFields`, dan `$useTimestamps`.
+
+4. **Fungsi Read (Menampilkan Data).** Menggunakan method `$model->findAll()` pada controller `Artikel` untuk mengambil seluruh data dari tabel dan merendernya pada view `artikel/index.php`.
+
+5. **Fungsi Create (Menambahkan Data).** Membuat form `add.php` dan menangani request POST dengan validasi menggunakan `$this->validate()`. Data disimpan menggunakan `$model->insert($data)`.
+
+6. **Fungsi Update (Mengubah Data).** Menggunakan method `$model->update($id, $data)` untuk memodifikasi record berdasarkan ID.
+
+7. **Fungsi Delete (Menghapus Data).** Menghapus record dari database menggunakan `$model->delete($id)`.
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Selesaikan programnya (CRUD) sesuai Langkah-langkah yang ada.
 >
-> **Jawaban:** Fungsi Create, Read, Update, dan Delete untuk tabel `artikel` sudah berjalan penuh dan terintegrasi dengan baik ke database.
+> **Jawaban:** Seluruh fungsi CRUD untuk tabel `artikel` telah berjalan penuh dan terintegrasi dengan database. Implementasi mencakup form input, validasi server-side, upload file gambar, dan notifikasi flash message.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| Daftar Artikel | ![Daftar Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true) |
-| Halaman Admin | ![Admin](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080019.png?raw=true) |
-| Form Tambah Artikel | ![Form Tambah](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080151.png?raw=true) |
-| Form Edit Artikel | ![Form Edit](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true) |
+| Daftar Artikel Publik | ![Daftar Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/01_user_daftar_artikel.png?raw=true) |
+| Halaman Admin - Daftar Artikel | ![Admin Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
+| Form Tambah Artikel dengan Validasi | ![Tambah Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/03_admin_tambah_validasi.png?raw=true) |
+| Form Edit Artikel | ![Edit Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/04_admin_edit_artikel_2.png?raw=true) |
+| Konfirmasi Hapus Artikel | ![Hapus Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/05_admin_delete_confirm.png?raw=true) |
 
 ---
 
@@ -107,56 +111,60 @@ Fokus utama adalah manajemen basis data (Database) dari antarmuka Web.
 
 ### Tujuan Praktikum
 
-1. Mampu mengelola antarmuka (UI) menggunakan teknik Layouting di CI4.
-2. Memahami penggunaan View Cell untuk merender komponen kecil dinamis.
+1. Mahasiswa mampu mengelola antarmuka (UI) menggunakan teknik Layouting di CI4.
+2. Mahasiswa mampu memahami penggunaan View Cell untuk merender komponen dinamis.
 
 ### Langkah-langkah Praktikum
 
-1. **Penerapan Layout Bawaan**: Memanfaatkan `$this->extend('layout/main')` dan `$this->section('content')` sebagai pembungkus komponen.
-2. **Komponen Modular**: Mengisolasi sidebar, header, dan navigasi agar efisien tidak perlu ditulis berulang kali.
-3. **Konfigurasi View Cell**: Menggunakan pemanggilan cell untuk hal seperti Recent Posts atau elemen lain yang memerlukan logic khusus dari server.
+1. **Penerapan Layout Bawaan.** Memanfaatkan method `$this->extend('layout/main')` dan mendefinisikan `$this->section('content')` sebagai area konten yang akan dirender di dalam layout utama.
+
+2. **Komponen Modular.** Memisahkan elemen UI seperti sidebar, header, dan navigasi ke dalam file terpisah untuk menghindari duplikasi kode.
+
+3. **Konfigurasi View Cell.** Menggunakan pemanggilan View Cell seperti `view_cell('ArtikelTerkini::render')` untuk merender komponen yang memerlukan logika server-side secara modular.
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Implementasikan sistem Layouting pada project Anda.
 >
-> **Jawaban:** Seluruh view pada CRUD Artikel kini tidak lagi memuat struktur dasar HTML karena telah dirender menggunakan sistem pewarisan `extend` ke file main layout.
+> **Jawaban:** Seluruh view pada aplikasi kini menggunakan sistem pewarisan layout. File `Views/layout/main.php` menjadi template utama, sedangkan setiap halaman konten hanya mendefinisikan section `content` yang akan dirender di dalamnya.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| Halaman About dengan Sidebar | ![About + Sidebar](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080933.png?raw=true) |
+| Halaman About dengan Layout dan Sidebar | ![About Layout](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_halaman_about.png?raw=true) |
 
 ---
 
-## Praktikum 4: Framework Lanjutan (Modul Login & Register)
+## Praktikum 4: Framework Lanjutan (Modul Login)
 
 ### Tujuan Praktikum
 
-Membuat sistem Autentikasi Pengguna menggunakan Session bawaan CodeIgniter.
+Mahasiswa mampu membuat sistem autentikasi pengguna menggunakan Session bawaan CodeIgniter 4.
 
 ### Langkah-langkah Praktikum
 
-Sistem CRUD Admin hanya boleh diakses oleh Administrator yang memiliki identitas yang sah.
+1. **Membuat Tabel User.** Membuat tabel `user` di database dengan kolom `id`, `username`, `useremail`, dan `userpassword`. Membuat file `app/Models/UserModel.php` sebagai model untuk tabel tersebut.
 
-1. **Tabel User**: Membuat tabel `user` beserta Model-nya (`UserModel.php`).
-2. **Database Seeder**: Mengisi dummy admin menggunakan perintah CLI `php spark make:seeder UserSeeder`.
-3. **Controller Login**: Membuat `User.php` dengan fungsi autentikasi email dan verifikasi Hash Password `password_verify()`. Jika sukses, session `logged_in` diset `true`.
-4. **Membangun Route Filter**: Mengamankan endpoint admin dengan Middleware/Filters. Dibuat file `app/Filters/Auth.php` yang me-redirect pengguna ke `/login` bila Session belum terset.
+2. **Database Seeder.** Mengisi data admin awal menggunakan perintah CLI: `php spark make:seeder UserSeeder`, kemudian menjalankan `php spark db:seed UserSeeder` untuk memasukkan record admin ke database.
+
+3. **Controller Login.** Membuat file `app/Controllers/User.php` yang menangani proses autentikasi. Method `login()` memvalidasi kredensial dengan `password_verify()` dan menyimpan session `logged_in` apabila autentikasi berhasil.
+
+4. **Route Filter.** Membuat file `app/Filters/Auth.php` yang memeriksa keberadaan session `logged_in`. Apabila session tidak ditemukan, pengguna di-redirect ke halaman login. Filter ini didaftarkan pada `app/Config/Filters.php` dan diterapkan pada grup route admin.
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Selesaikan program Login sesuai langkah-langkah.
 >
-> **Jawaban:** Panel Admin berhasil diamankan dengan Filter. Jika User mencoba mengakses kelola artikel sebelum melakukan Sign-In, sistem akan menolaknya dan me-redirect ke form Login.
+> **Jawaban:** Panel admin telah diamankan menggunakan Filter autentikasi. Setiap akses ke halaman admin tanpa sesi login yang valid akan ditolak dan diarahkan ke halaman login. Seluruh kredensial admin disimpan dalam bentuk hash (bcrypt) di database.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| Form Login | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20091948.png?raw=true) |
-| Dashboard Admin (setelah login) | ![Admin Dashboard](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20092322.png?raw=true) |
+| Halaman Login | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
+
+*Catatan: Screenshot form login dapat diambil pada URL `http://localhost:8080/user/login` dengan kredensial admin@email.com / admin123.*
 
 ---
 
@@ -164,29 +172,29 @@ Sistem CRUD Admin hanya boleh diakses oleh Administrator yang memiliki identitas
 
 ### Tujuan Praktikum
 
-1. Memahami konsep dasar Pagination.
-2. Memahami konsep dasar Pencarian.
-3. Membuat Paging dan Pencarian menggunakan Framework CodeIgniter 4.
+1. Mahasiswa mampu memahami konsep dasar Pagination.
+2. Mahasiswa mampu memahami konsep dasar Pencarian (Search).
+3. Mahasiswa mampu mengimplementasikan Pagination dan Pencarian menggunakan CI4.
 
 ### Langkah-langkah Praktikum
 
-Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web menjadi lambat).
+1. **Instansiasi Pager.** Menggunakan method `$model->paginate(10)` pada controller `Artikel` untuk membatasi jumlah data yang ditampilkan per halaman.
 
-1. **Instansiasi Pager**: Menggunakan library `$model->paginate(10)` pada Controller `Artikel.php`.
-2. **Fungsi Pencarian**: Menangkap input pencarian `q` via GET Request, kemudian dihubungkan dengan Query Builder `like('judul', $q)`.
-3. **Tautan Paging View**: Merender struktur UI halaman berikutnya di view admin menggunakan `<?= $pager->only(['q'])->links(); ?>`.
+2. **Fungsi Pencarian.** Menangkap parameter pencarian `q` dari query string menggunakan `$this->request->getGet('q')`, kemudian menerapkannya pada query builder dengan method `like('judul', $q)`.
+
+3. **Tautan Paginasi di View.** Merender navigasi halaman pada view admin menggunakan `<?= $pager->only(['q'])->links() ?>`, sehingga parameter pencarian tetap dipertahankan saat berpindah halaman.
 
 ### Pertanyaan dan Tugas
 
 > **Pertanyaan:** Selesaikan programnya sesuai Langkah-langkah yang ada. Anda boleh melakukan improvisasi.
 >
-> **Jawaban:** Pagination CI4 dan filter pencarian terintegrasi penuh. Ketika pengguna mengetikkan kata pencarian, data hasil pencarian juga secara dinamis dipecah menjadi beberapa halaman berkat penggunaan fungsi `only(['q'])`.
+> **Jawaban:** Pagination dan fitur pencarian telah terintegrasi penuh. Ketika pengguna mengetikkan kata kunci pencarian, data difilter berdasarkan judul artikel dan hasilnya tetap ditampilkan dalam format paginasi berkat penggunaan fungsi `only(['q'])` pada pager.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| Pagination & Pencarian | ![Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true) |
+| Pagination dan Pencarian | ![Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
 
 ---
 
@@ -194,14 +202,18 @@ Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web men
 
 ### Tujuan Praktikum
 
-1. Memahami Relasi antar tabel database (Tabel Artikel dengan Kategori).
-2. Memodifikasi Layout agar sangat dinamis menggunakan View Cell.
+1. Mahasiswa mampu memahami relasi antar tabel database (tabel Artikel dengan tabel Kategori).
+2. Mahasiswa mampu memodifikasi layout agar bersifat dinamis menggunakan View Cell.
 
 ### Langkah-langkah Praktikum
 
-1. **Modifikasi Daftar Kategori pada Sidebar**: Membuat View Cell `app/Cells/KategoriList.php` untuk merender nama-nama kategori secara dinamis dari tabel (bukan hardcode HTML).
-2. **Relasi Database (JOIN)**: Memodifikasi fungsi `view($slug)` pada controller agar melakukan Query Builder `JOIN` ke tabel kategori dan mengambil nilai asli `nama_kategori`.
-3. **Injeksi Data**: Menyuntikkan string `nama_kategori` ini agar dapat dibaca di halaman Front-End `detail.php`.
+1. **Membuat Tabel Kategori.** Membuat tabel `kategori` dengan kolom `id` dan `nama_kategori`. Menambahkan kolom `id_kategori` pada tabel `artikel` sebagai foreign key.
+
+2. **View Cell untuk Kategori.** Membuat View Cell `app/Cells/KategoriList.php` untuk merender daftar kategori secara dinamis dari database, bukan hardcode HTML.
+
+3. **Relasi Database dengan JOIN.** Memodifikasi fungsi `view($slug)` pada controller `Artikel` untuk melakukan query JOIN antara tabel `artikel` dan `kategori`, sehingga nama kategori dapat ditampilkan pada halaman detail artikel.
+
+4. **Injeksi Data Kategori.** Menyuntikkan data `nama_kategori` ke dalam view `detail.php` agar dapat ditampilkan kepada pengguna.
 
 ### Pertanyaan dan Tugas
 
@@ -211,30 +223,32 @@ Menghindari perenderan data masif sekaligus ke layar (yang dapat membuat web men
 > 3. Tambahkan fitur untuk menampilkan daftar kategori di halaman depan (opsional).
 > 4. Buat fungsi untuk menampilkan artikel berdasarkan kategori tertentu (opsional).
 >
-> **Jawaban:** Data `nama_kategori` sukses diambil melalui relasi `JOIN` dari dalam model dan disuntikkan ke tampilan detail. View Cell di sidebar juga telah berhasil memanggil fungsionalitas kategori secara dinamis.
+> **Jawaban:** Data `nama_kategori` berhasil diambil melalui operasi JOIN antar tabel dan ditampilkan pada halaman detail artikel. View Cell di sidebar menampilkan daftar kategori secara dinamis, dan pengguna dapat memfilter artikel berdasarkan kategori yang dipilih.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| Detail Artikel dengan Kategori | ![Detail Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true) |
+| Detail Artikel dengan Informasi Kategori | ![Detail Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/01_user_daftar_artikel.png?raw=true) |
 
 ---
 
-## Praktikum 9: AJAX & Real-time Pagination
+## Praktikum 9: AJAX dan Real-time Pagination
 
 ### Tujuan Praktikum
 
-1. Memahami prinsip asinkronus (Asynchronous Javascript and XML).
-2. Memindahkan perenderan tabel dan sorting pada halaman Admin agar tidak terjadi page-reload / refresh.
+1. Mahasiswa mampu memahami prinsip kerja AJAX (Asynchronous JavaScript and XML).
+2. Mahasiswa mampu mengimplementasikan pemuatan data artikel secara asinkron tanpa reload halaman.
 
 ### Langkah-langkah Praktikum
 
-Meningkatkan User Experience secara dramatis dengan membuat Web beroperasi seperti aplikasi nyata.
+1. **Backend Response JSON.** Memodifikasi controller `Artikel` agar mendeteksi permintaan AJAX menggunakan `$this->request->isAJAX()`. Apabila terdeteksi sebagai AJAX, server mereturn data dalam format JSON.
 
-1. **Backend Response**: Memodifikasi Controller `Artikel.php` agar mendeteksi permintaan AJAX menggunakan `$this->request->isAJAX()`. Jika terpenuhi, server membalikkan respon berupa JSON string.
-2. **AJAX Javascript**: Pembuatan script utama asinkron dengan jQuery AJAX (`fetchData()`) di view utama admin.
-3. **Fungsi Sorting & Loading**: Memasukkan logika click handler untuk menata kolom Judul (ASC/DESC), dan menyalakan Spinner/Loading saat jQuery melakukan pengambilan data jarak jauh.
+2. **Fungsi AJAX JavaScript.** Membuat skrip jQuery untuk mengambil data artikel secara asinkron menggunakan `$.ajax()`. Fungsi `fetchData()` dipanggil saat halaman dimuat dan saat tombol pagination diklik.
+
+3. **Sorting Data.** Menambahkan event handler pada header kolom tabel untuk mengurutkan data berdasarkan judul (ASC/DESC) tanpa reload halaman.
+
+4. **Indikator Loading.** Menampilkan animasi spinner atau teks loading saat permintaan AJAX sedang diproses oleh server.
 
 ### Pertanyaan dan Tugas
 
@@ -242,42 +256,16 @@ Meningkatkan User Experience secara dramatis dengan membuat Web beroperasi seper
 > 1. Selesaikan semua langkah praktikum di atas.
 > 2. Modifikasi tampilan data artikel dan pagination sesuai kebutuhan desain.
 > 3. Tambahkan indikator loading saat data sedang diambil dari server.
-> 4. Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul, dll.) dengan AJAX.
+> 4. Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul) dengan AJAX.
 >
-> **Jawaban:** Seluruh tugas berjalan dengan lancar. Animasi Loading Spinner terlihat transparan sesaat `$.ajax` berproses. Fitur pengurutan (Sorting) berfungsi mengubah susunan UI secara asinkron tanpa hard-reload pada browser.
+> **Jawaban:** Seluruh tugas telah diselesaikan. Data artikel dimuat secara asinkron melalui AJAX dengan dukungan pagination dan sorting. Indikator loading muncul saat proses pengambilan data berlangsung. Pengguna dapat mengurutkan data berdasarkan judul tanpa mengalami reload halaman.
 
-### Screenshot Hasil Kerja
+### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
 |----------|------------|
-| AJAX Pagination & Sorting | ![AJAX](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true) |
-
----
-
-## Template Screenshot
-
-Berikut adalah daftar screenshot yang wajib dilampirkan dalam laporan akhir praktikum. Setiap screenshot harus diambil dari aplikasi yang sudah berjalan dan menampilkan hasil setelah seluruh perbaikan bug diterapkan.
-
-| No | Halaman / Fitur | URL / Lokasi | Keterangan | Status Screenshot |
-|----|----------------|--------------|------------|-------------------|
-| 1 | Halaman Home/Landing | `/` | Tampilan halaman utama website | Belum ada |
-| 2 | Halaman About | `/about` | Halaman about dengan layout dan sidebar | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080933.png?raw=true) |
-| 3 | Halaman Artikel Publik | `/artikel` | Daftar artikel yang sudah dipublikasikan (status=1) | Belum ada |
-| 4 | Halaman Detail Artikel | `/artikel/{slug}` | Detail artikel lengkap dengan kategori | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20075543.png?raw=true) |
-| 5 | Halaman Login | `/user/login` | Form login admin | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20091948.png?raw=true) |
-| 6 | Halaman Admin Artikel | `/admin/artikel` | Tabel daftar artikel di panel admin | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080019.png?raw=true) |
-| 7 | Halaman Tambah Artikel | `/admin/artikel/add` | Form tambah artikel dengan form upload gambar | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080151.png?raw=true) |
-| 8 | Halaman Edit Artikel | `/admin/artikel/edit/{id}` | Form edit artikel dengan data terisi | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-02%20080219.png?raw=true) |
-| 9 | Halaman AJAX Artikel | `/ajax` | Tabel AJAX dengan pagination dan sorting | ![Screenshot](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/Screenshot%202026-04-09%20104557.png?raw=true) |
-| 10 | Halaman API Post (JSON) | `GET /post` | Output JSON endpoint API di browser atau Postman | Belum ada |
-| 11 | Database Tables | phpMyAdmin | Struktur tabel `artikel`, `kategori`, dan `user` | Belum ada |
-
-### Catatan Pengambilan Screenshot
-
-- **Nomor 1, 3, 10, 11** belum memiliki screenshot. Silakan lengkapi dengan mengambil gambar dari aplikasi yang sudah berjalan.
-- **Screenshot yang sudah ada** dapat digunakan kembali atau diambil ulang jika tampilan berubah setelah perbaikan bug.
-- Semua screenshot disimpan di folder `Secrenshoot/` pada root repositori dengan format nama: `Screenshot YYYY-MM-DD HHMMSS.png`.
-- URL screenshot di README menggunakan format raw GitHub: `https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/<nama-file>?raw=true`.
+| Tabel Artikel dengan AJAX dan Pagination | ![AJAX Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/08_ajax_data_artikel.png?raw=true) |
+| Response JSON Endpoint API | ![API JSON](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/07_api_json_response.png?raw=true) |
 
 ---
 
@@ -288,12 +276,12 @@ Lab7Web/
 ├── ci4/                                # CodeIgniter 4 Framework
 │   ├── app/
 │   │   ├── Config/                     # Konfigurasi Routes, Filters, Database
-│   │   ├── Controllers/                # Page, Artikel, User
+│   │   ├── Controllers/                # Page, Artikel, User, Post
 │   │   ├── Models/                     # ArtikelModel, UserModel, KategoriModel
 │   │   ├── Views/                      # Template, Layout, View komponen
 │   │   ├── Cells/                      # View Cell (ArtikelTerkini, KategoriList)
 │   │   └── Filters/                    # Auth, ApiAuthFilter
-│   ├── public/                         # Entry point, style.css, uploads/
+│   ├── public/                         # Entry point, style.css, uploads/gambar/
 │   ├── router.php                      # CORS handler untuk php built-in server
 │   └── ...
 ├── Secrenshoot/                        # Dokumentasi screenshot praktikum
@@ -302,4 +290,6 @@ Lab7Web/
 
 ---
 
-(c) 2026 Muhammad Arkhamullah R.A - Laporan Praktikum Pemrograman Web
+**(c) 2026 Muhammad Arkhamullah R.A - Laporan Praktikum Pemrograman Web 2**  
+**Program Studi Teknik Informatika - Universitas Pelita Bangsa**
+

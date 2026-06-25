@@ -30,8 +30,7 @@
 7. [Praktikum 9: AJAX dan Real-time Pagination](#praktikum-9-ajax-dan-real-time-pagination)
 8. [Kode Program Lengkap](#kode-program-lengkap)
 9. [Struktur Folder](#struktur-folder)
-10. [TAMBAHAN: Routing Essentials](#tambahan-ci4-routing-essentials-studi-kasus)
-11. [TAMBAHAN: Kalkulator Controller](#tambahan-ci4-controller-logic-kalkulator)
+
 
 ---
 

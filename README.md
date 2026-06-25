@@ -30,6 +30,8 @@
 7. [Praktikum 9: AJAX dan Real-time Pagination](#praktikum-9-ajax-dan-real-time-pagination)
 8. [Kode Program Lengkap](#kode-program-lengkap)
 9. [Struktur Folder](#struktur-folder)
+10. [TAMBAHAN: Routing Essentials](#tambahan-ci4-routing-essentials-studi-kasus)
+11. [TAMBAHAN: Kalkulator Controller](#tambahan-ci4-controller-logic-kalkulator)
 
 ---
 
@@ -374,6 +376,87 @@ class ArtikelTerkini
 }
 ```
 
+4. **View Cell Filter Berdasarkan Kategori.**
+
+```php
+<?php
+
+namespace App\Cells;
+
+use App\Models\ArtikelModel;
+
+class ArtikelByKategori
+{
+    public function render($params = []): string
+    {
+        $kategoriId = $params['kategori_id'] ?? null;
+        $model = new ArtikelModel();
+
+        if ($kategoriId) {
+            $artikel = $model->where('id_kategori', $kategoriId)
+                ->where('status', 1)
+                ->orderBy('created_at', 'DESC')
+                ->findAll(5);
+        } else {
+            $artikel = $model->where('status', 1)
+                ->orderBy('created_at', 'DESC')
+                ->findAll(5);
+        }
+
+        return view('cells/artikel_by_kategori', ['artikel' => $artikel, 'kategori_id' => $kategoriId]);
+    }
+}
+```
+
+```php
+<!-- app/Views/cells/artikel_by_kategori.php -->
+<ul>
+    <?php foreach ($artikel as $row): ?>
+    <li>
+        <a href="<?= base_url('/artikel/' . $row['slug']); ?>">
+            <?= $row['judul']; ?>
+        </a>
+        <small>(<?= date('d M Y', strtotime($row['created_at'])); ?>)</small>
+    </li>
+    <?php endforeach; ?>
+</ul>
+```
+
+Pemanggilan di view:
+```php
+<?= view_cell('ArtikelByKategori::render', ['kategori_id' => 1]); ?>
+```
+
+### Pertanyaan dan Tugas
+
+> **Pertanyaan 1:** Sesuaikan data dengan praktikum sebelumnya, perlu melakukan perubahan field pada database dengan menambahkan tanggal agar dapat mengambil data artikel terbaru.
+>
+> **Jawaban:** Secara default, tabel `artikel` sudah memiliki kolom `created_at` dan `updated_at` dengan tipe `DATETIME`. Model `ArtikelModel` sudah mengaktifkan `$useTimestamps = true` sehingga kolom tanggal otomatis terisi. Untuk mengambil artikel terbaru, gunakan `orderBy('created_at', 'DESC')`.
+
+> **Pertanyaan 2:** Apa manfaat utama dari penggunaan View Layout dalam pengembangan aplikasi?
+>
+> **Jawaban:**
+> 1. **Code Reusability** — Kode HTML yang sama (header, footer, sidebar) ditulis sekali dan digunakan di semua halaman, menghilangkan duplikasi.
+> 2. **Konsistensi UI** — Seluruh halaman memiliki struktur HTML yang seragam karena menggunakan layout induk yang sama.
+> 3. **Maintenance Mudah** — Perubahan pada header atau footer cukup dilakukan di satu file layout, tidak perlu mengubah setiap halaman satu per satu.
+> 4. **Pemisahan Konten & Struktur** — Setiap halaman hanya fokus pada kontennya (section `content`), sedangkan struktur HTML ditangani oleh layout.
+
+> **Pertanyaan 3:** Jelaskan perbedaan antara View Cell dan View biasa.
+>
+> **Jawaban:**
+>
+> | Aspek | View Biasa | View Cell |
+> |-------|-----------|-----------|
+> | Paradigma | Statis — data dikirim dari controller | Dinamis — komponen mandiri dengan logika sendiri |
+> | Pemanggilan | `return view('nama_view', $data)` | `view_cell('NamaCell::render')` |
+> | Logika | Bergantung pada controller | Memiliki class sendiri dengan logika server-side |
+> | Penggunaan | Halaman penuh (layout halaman) | Komponen kecil yang muncul di banyak halaman (sidebar, widget) |
+> | Data | Dikirim dari controller sebagai parameter | Diambil sendiri dari database melalui class Cell |
+
+> **Pertanyaan 4:** Ubah View Cell agar hanya menampilkan post dengan kategori tertentu.
+>
+> **Jawaban:** Telah dibuat `ArtikelByKategori` Cell (lihat kode di atas) yang menerima parameter `kategori_id`. Ketika parameter diberikan, Cell hanya menampilkan artikel dari kategori tersebut. Pemanggilan: `<?= view_cell('ArtikelByKategori::render', ['kategori_id' => 1]); ?>`
+
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
@@ -628,6 +711,94 @@ public function view($slug)
 }
 ```
 
+4. **View Cell Kategori di Sidebar.** Menampilkan daftar kategori di halaman depan.
+
+```php
+<?php
+
+namespace App\Cells;
+
+use App\Models\KategoriModel;
+
+class KategoriList
+{
+    public function render(): string
+    {
+        $model = new KategoriModel();
+        $kategori = $model->findAll();
+        return view('cells/kategori_list', ['kategori' => $kategori]);
+    }
+}
+```
+
+```php
+<!-- app/Views/cells/kategori_list.php -->
+<ul>
+    <?php foreach ($kategori as $row): ?>
+    <li>
+        <a href="<?= base_url('/artikel/kategori/' . $row['slug_kategori']); ?>">
+            <?= $row['nama_kategori']; ?>
+        </a>
+    </li>
+    <?php endforeach; ?>
+</ul>
+```
+
+5. **Fungsi Menampilkan Artikel Berdasarkan Kategori.**
+
+```php
+// app/Controllers/Artikel.php
+public function kategori($slug_kategori)
+{
+    $kategoriModel = new KategoriModel();
+    $artikelModel  = new ArtikelModel();
+
+    $kategori = $kategoriModel->where('slug_kategori', $slug_kategori)->first();
+
+    if (!$kategori) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException('Kategori tidak ditemukan.');
+    }
+
+    $artikel = $artikelModel
+        ->select('artikel.*, kategori.nama_kategori')
+        ->join('kategori', 'kategori.id = artikel.id_kategori', 'left')
+        ->where('artikel.id_kategori', $kategori['id'])
+        ->where('artikel.status', 1)
+        ->findAll();
+
+    $data = [
+        'title'         => 'Kategori: ' . $kategori['nama_kategori'],
+        'artikel'       => $artikel,
+        'nama_kategori' => $kategori['nama_kategori'],
+    ];
+
+    return view('artikel/kategori', $data);
+}
+```
+
+```php
+// app/Config/Routes.php
+$routes->get('/artikel/kategori/(:any)', 'Artikel::kategori/$1');
+```
+
+### Pertanyaan dan Tugas
+
+> **Pertanyaan 1:** Selesaikan semua langkah praktikum di atas.
+>
+> **Jawaban:** Seluruh langkah telah diselesaikan: pembuatan tabel kategori, model kategori, relasi JOIN pada controller, dan View Cell untuk menampilkan kategori di sidebar.
+
+> **Pertanyaan 2:** Modifikasi tampilan detail artikel (artikel/detail.php) untuk menampilkan nama kategori artikel.
+>
+> **Jawaban:** Data `nama_kategori` diambil melalui operasi JOIN antara tabel `artikel` dan `kategori`, kemudian ditampilkan di `detail.php` menggunakan `<?= $artikel['nama_kategori']; ?>`.
+
+> **Pertanyaan 3:** Tambahkan fitur untuk menampilkan daftar kategori di halaman depan (opsional).
+>
+> **Jawaban:** Telah dibuat `KategoriList` Cell (lihat kode di atas) yang menampilkan seluruh daftar kategori dari database di sidebar. Setiap kategori menjadi tautan ke halaman artikel per kategori.
+
+> **Pertanyaan 4:** Buat fungsi untuk menampilkan artikel berdasarkan kategori tertentu (opsional).
+>
+> **Jawaban:** Telah dibuat method `kategori($slug_kategori)` pada `ArtikelController` yang memfilter artikel berdasarkan `slug_kategori`. Route: `$routes->get('/artikel/kategori/(:any)', 'Artikel::kategori/$1');`
+
 ### Dokumentasi Screenshot
 
 | Tampilan | Screenshot |
@@ -670,15 +841,21 @@ class AjaxController extends BaseController
 }
 ```
 
-2. **View AJAX dengan jQuery.**
+2. **View AJAX dengan jQuery (Loading Indicator + Sorting).**
 
 ```html
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-$(document).ready(function() {
+// Fungsi fetch data dengan loading indicator + sorting
+function fetchData(sortField, sortOrder) {
+    $('#loading-indicator').show();
     $.ajax({
         url: '<?= base_url("ajax/getData") ?>',
         type: 'GET',
+        data: {
+            sort: sortField || 'id',
+            order: sortOrder || 'DESC'
+        },
         dataType: 'json',
         success: function(response) {
             var html = '';
@@ -691,13 +868,34 @@ $(document).ready(function() {
                 html += '</tr>';
             });
             $('#artikel-list').html(html);
+            $('#loading-indicator').hide();
         },
         error: function() {
             $('#artikel-list').html('<tr><td colspan="4">Gagal memuat data.</td></tr>');
+            $('#loading-indicator').hide();
         }
     });
+}
+
+// Panggil saat halaman dimuat
+$(document).ready(function() {
+    fetchData('id', 'DESC');
+});
+
+// Sorting klik header kolom
+$(document).on('click', '.sortable', function() {
+    var field = $(this).data('field');
+    var order = $(this).data('order');
+    $(this).data('order', order === 'ASC' ? 'DESC' : 'ASC');
+    fetchData(field, order);
 });
 </script>
+
+<!-- Loading Indicator -->
+<div id="loading-indicator" style="display:none; text-align:center; padding:20px;">
+    <img src="<?= base_url('loading.gif'); ?>" alt="Memuat data..." />
+    <p>Memuat data...</p>
+</div>
 ```
 
 3. **Route AJAX + REST API.**
@@ -851,3 +1049,81 @@ Lab7Web/
 
 **(c) 2026 Muhammad Arkhamullah R.A - Laporan Praktikum Pemrograman Web 2**  
 **Program Studi Teknik Informatika - Universitas Pelita Bangsa**
+
+---
+
+## TAMBAHAN: CI4 Routing Essentials (Studi Kasus)
+
+**File Referensi:** `02 CI4_Routing_Essentials.pdf` - Halaman 12
+
+### Studi Kasus: Routing Data Mahasiswa
+
+> **Soal:** Buat routing untuk URL berikut:
+> - `kampus.ac.id/mahasiswa` → Menampilkan daftar semua mahasiswa
+> - `kampus.ac.id/mahasiswa/12345` → Menampilkan detail mahasiswa dengan NIM 12345
+> - `kampus.ac.id/mahasiswa/tambah` → Menampilkan form tambah data
+>
+> **Perhatikan urutan prioritas routing!**
+
+```php
+// app/Config/Routes.php
+$routes->get('/mahasiswa/tambah', 'Mahasiswa::tambah');   // Form tambah (prioritas 1)
+$routes->get('/mahasiswa/(:num)', 'Mahasiswa::detail/$1'); // Detail dengan parameter numerik
+$routes->get('/mahasiswa', 'Mahasiswa::index');            // Daftar semua mahasiswa
+```
+
+> **Penjelasan Urutan Prioritas:**
+>
+> Route `mahasiswa/tambah` harus diletakkan SEBELUM `mahasiswa/(:num)`. Jika `mahasiswa/(:num)` diletakkan lebih dulu, maka URL `mahasiswa/tambah` akan dianggap sebagai parameter numerik (`tambah` bukan angka) dan tidak akan cocok dengan pola `(:num)`, sehingga tetap aman. Namun, jika menggunakan `(:any)` maka `tambah` akan cocok dan form tambah tidak akan pernah tercapai.
+>
+> Urutan yang benar: Spesifik → Generik. Route yang paling spesifik (`/tambah`) harus di atas route generik (`/(:num)`).
+
+---
+
+## TAMBAHAN: CI4 Controller Logic (Kalkulator)
+
+**File Referensi:** `03 CI4_Controller_Logic.pdf` - Halaman 10
+
+### Studi Kasus: Membuat Kalkulator Sederhana
+
+> **Soal:**
+> 1. Buat file Controller bernama `Kalkulator.php`
+> 2. Buat dua method: `tambah()` dan `kurang()`
+> 3. Ambil dua angka dari segment URI (contoh: `/kalkulator/tambah/5/3`)
+> 4. Lakukan operasi matematika (+ atau -)
+> 5. Tampilkan hasil langsung ke layar
+
+```php
+<?php
+
+namespace App\Controllers;
+
+class Kalkulator extends BaseController
+{
+    public function tambah($angka1, $angka2)
+    {
+        $hasil = $angka1 + $angka2;
+        echo "Hasil penjumlahan $angka1 + $angka2 = $hasil";
+    }
+
+    public function kurang($angka1, $angka2)
+    {
+        $hasil = $angka1 - $angka2;
+        echo "Hasil pengurangan $angka1 - $angka2 = $hasil";
+    }
+}
+```
+
+```php
+// app/Config/Routes.php
+$routes->get('/kalkulator/tambah/(:num)/(:num)', 'Kalkulator::tambah/$1/$2');
+$routes->get('/kalkulator/kurang/(:num)/(:num)', 'Kalkulator::kurang/$1/$2');
+```
+
+> **Hasil Uji Coba:**
+> - URL: `http://localhost:8080/kalkulator/tambah/5/3` → Output: `Hasil penjumlahan 5 + 3 = 8`
+> - URL: `http://localhost:8080/kalkulator/kurang/10/4` → Output: `Hasil pengurangan 10 - 4 = 6`
+>
+> **Penjelasan:**
+>
+> Controller `Kalkulator` menerima dua parameter numerik dari segment URI (setelah method). Parameter tersebut diikat menggunakan `(:num)` pada route dan diteruskan ke method controller menggunakan placeholder `$1/$2`. Method melakukan operasi aritmatika dan menampilkan hasilnya langsung menggunakan `echo`.

@@ -1,6 +1,6 @@
 # Laporan Praktikum Pemrograman Web 2 - Lab7Web
 
-![PHP](https://img.shields.io/badge/PHP-8.1-%23777BB4?style=flat&logo=php)
+![PHP](https://img.shields.io/badge/PHP-8.2-%23777BB4?style=flat&logo=php)
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-4-%23EF4223?style=flat&logo=codeigniter)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-%234479A1?style=flat&logo=mysql)
 ![License](https://img.shields.io/badge/License-MIT-%23-yellow?style=flat)
@@ -460,7 +460,7 @@ Pemanggilan di view:
 
 | Tampilan | Screenshot |
 |----------|-----------|
-| Halaman About dengan Layout dan Sidebar | ![About Layout](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/00_user_halaman_about.png?raw=true) |
+| Halaman About dengan Layout dan Sidebar | ![About Layout](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/m3_about_sidebar.png?raw=true) |
 
 ---
 
@@ -588,7 +588,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
 | Tampilan | Screenshot |
 |----------|-----------|
-| Halaman Login Admin | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
+| Halaman Login Admin | ![Form Login](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/m4_form_login.png?raw=true) |
 
 ---
 
@@ -642,7 +642,7 @@ public function index()
 
 | Tampilan | Screenshot |
 |----------|-----------|
-| Pagination dan Pencarian | ![Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
+| Pagination dan Pencarian | ![Pagination](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/m5_pagination_pencarian.png?raw=true) |
 
 ---
 

@@ -293,6 +293,7 @@ class Artikel extends BaseController
 | Halaman Admin - Daftar Artikel | ![Admin Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/02_admin_daftar_artikel.png?raw=true) |
 | Form Tambah Artikel dengan Validasi | ![Tambah Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/03_admin_tambah_validasi.png?raw=true) |
 | Form Edit Artikel | ![Edit Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/04_admin_edit_artikel_2.png?raw=true) |
+| Halaman Edit Artikel | ![Edit Artikel 2](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/06_admin_edit_artikel.png?raw=true) |
 | Konfirmasi Hapus Artikel | ![Hapus Artikel](https://github.com/MuhammadArkham/Lab7Web/blob/main/Secrenshoot/05_admin_delete_confirm.png?raw=true) |
 
 ---
